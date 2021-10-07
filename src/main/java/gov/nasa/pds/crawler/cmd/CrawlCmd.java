@@ -1,8 +1,16 @@
 package gov.nasa.pds.crawler.cmd;
 
+import java.io.File;
+import java.util.UUID;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import gov.nasa.pds.crawler.cfg.ConfigReader;
+import gov.nasa.pds.crawler.cfg.model.Configuration;
+import gov.nasa.pds.crawler.proc.DirsProcessor;
+import gov.nasa.pds.crawler.util.log.LogUtils;
 
 
 /**
@@ -13,6 +21,11 @@ import org.apache.logging.log4j.Logger;
 public class CrawlCmd implements CliCommand
 {
     private Logger log;
+    private Configuration cfg;
+    private boolean dryRun;
+    
+    private DirsProcessor dirsProc;
+    
     
     /**
      * Constructor
@@ -32,9 +45,29 @@ public class CrawlCmd implements CliCommand
             printHelp();
             return;
         }
-        
-        log.info("Crawling");
 
+        configure(cmdLine);
+
+        if(cfg.dirs == null) return;
+        for(String path: cfg.dirs)
+        {
+            processDirectory(path);
+        }
+    }
+
+    
+    private void processDirectory(String path) throws Exception
+    {
+        File rootDir = new File(path);
+        if(!rootDir.exists())
+        {
+            log.warn("Invalid path: " + rootDir.getAbsolutePath());
+            return;
+        }
+        
+        log.info("Processing directory: " + rootDir.getAbsolutePath());
+        
+        dirsProc.process(rootDir);
     }
 
     
@@ -49,13 +82,33 @@ public class CrawlCmd implements CliCommand
         System.out.println("Crawl file system and queue PDS4 labels for processing");
         System.out.println();
         System.out.println("Required parameters:");
-        System.out.println("  -file <path>      Output file path");
-        System.out.println("  -lidvid <id>      Export data by lidvid");
-        System.out.println("  -packageId <id>   Export data by package id");
-        System.out.println("  -all              Export all data");
+        System.out.println("  -c <path>   Configuration file");
+        System.out.println();
         System.out.println("Optional parameters:");
-        System.out.println("  -auth <file>      Authentication config file");
+        System.out.println("  -dry        Dry run. Run crawler without queueing PDS4 labels for processing.");
+        
         System.out.println();
     }
 
+    
+    private void configure(CommandLine cmdLine) throws Exception
+    {
+        // Configuration file
+        String fileName = cmdLine.getOptionValue("c");
+        if(fileName == null) throw new Exception("Missing required parameter '-c'");
+        
+        File cfgFile = new File(fileName);
+        log.log(LogUtils.LEVEL_SUMMARY, "Reading configuration from " + cfgFile.getAbsolutePath());
+        ConfigReader cfgReader = new ConfigReader();
+        cfg = cfgReader.read(cfgFile);
+        
+        // Dry run option
+        dryRun = cmdLine.hasOption("dry");
+        
+        // Run ID
+        String runId = UUID.randomUUID().toString();
+        log.log(LogUtils.LEVEL_SUMMARY, "Run (Package) ID: " + runId);
+        
+        dirsProc = new DirsProcessor(cfg);
+    }
 }

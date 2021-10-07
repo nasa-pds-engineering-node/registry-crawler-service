@@ -186,6 +186,12 @@ public class CrawlerCli
         
         Option.Builder bld;
 
+        bld = Option.builder("help");
+        options.addOption(bld.build());
+
+        bld = Option.builder("dry");
+        options.addOption(bld.build());
+        
         bld = Option.builder("c").hasArg().argName("file");
         options.addOption(bld.build());
     }
