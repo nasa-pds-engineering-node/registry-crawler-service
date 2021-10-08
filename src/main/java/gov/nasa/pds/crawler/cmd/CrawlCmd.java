@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import gov.nasa.pds.crawler.cfg.ConfigReader;
 import gov.nasa.pds.crawler.cfg.model.Configuration;
 import gov.nasa.pds.crawler.proc.DirsProcessor;
+import gov.nasa.pds.crawler.pub.DataPublisher;
 import gov.nasa.pds.crawler.util.log.LogUtils;
 
 
@@ -22,7 +23,7 @@ public class CrawlCmd implements CliCommand
 {
     private Logger log;
     private Configuration cfg;
-    private boolean dryRun;
+    private String runId;
     
     private DirsProcessor dirsProc;
     
@@ -30,8 +31,9 @@ public class CrawlCmd implements CliCommand
     /**
      * Constructor
      */
-    public CrawlCmd()
+    public CrawlCmd(String runId)
     {
+        this.runId = runId;
     }
     
 
@@ -103,12 +105,12 @@ public class CrawlCmd implements CliCommand
         cfg = cfgReader.read(cfgFile);
         
         // Dry run option
-        dryRun = cmdLine.hasOption("dry");
+        boolean dryRun = cmdLine.hasOption("dry");
+
+        DataPublisher pub = new DataPublisher(cfg, runId);                
+        dirsProc = new DirsProcessor(cfg, pub);
         
-        // Run ID
-        String runId = UUID.randomUUID().toString();
-        log.log(LogUtils.LEVEL_SUMMARY, "Run (Package) ID: " + runId);
+        log.log(LogUtils.LEVEL_SUMMARY, "Run (Package) ID: " + runId);        
         
-        dirsProc = new DirsProcessor(cfg);
     }
 }

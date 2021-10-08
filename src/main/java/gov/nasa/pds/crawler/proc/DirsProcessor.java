@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import gov.nasa.pds.crawler.cfg.model.Configuration;
 import gov.nasa.pds.crawler.cfg.model.FileRefsCfg;
+import gov.nasa.pds.crawler.pub.DataPublisher;
 
 
 /**
@@ -23,13 +24,14 @@ public class DirsProcessor
 {
     private Logger log;
     private FileRefsCfg fileRefsCfg;
+    private DataPublisher pub;
     
     
-    public DirsProcessor(Configuration cfg)
+    public DirsProcessor(Configuration cfg, DataPublisher pub)
     {
         log = LogManager.getLogger(this.getClass());
-        
         fileRefsCfg = cfg.fileRefs;
+        this.pub = pub;
     }
     
     
@@ -71,29 +73,7 @@ public class DirsProcessor
     private void onFile(File file) throws Exception
     {
         String filePath = file.getAbsolutePath();
-        String fileRef = getFileRef(file);
-        
-        log.info(filePath + "  -->  " + fileRef);
+        pub.publish(filePath);
     }
     
-    
-    private String getFileRef(File file)
-    {
-        String filePath = file.toURI().getPath();
-        
-        if(fileRefsCfg.fileRef != null)
-        {
-            for(FileRefsCfg.FileRefCfg rule: fileRefsCfg.fileRef)
-            {
-                if(filePath.startsWith(rule.prefix))
-                {
-                    filePath = rule.replacement + filePath.substring(rule.prefix.length());
-                    break;
-                }
-            }
-        }
-        
-        return filePath;
-    }
-
 }

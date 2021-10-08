@@ -12,7 +12,7 @@ import gov.nasa.pds.crawler.util.xml.XmlDomUtils;
 
 
 /**
- * Crawler configuration file parser. Parses "/crawler/fileRefs" section.
+ * Crawler configuration file parser. Parses "/crawler/fileInfo" section.
  * 
  * @author karpenko
  */
@@ -29,9 +29,9 @@ public class FileRefsParser
         XPathUtils xpu = new XPathUtils();
         FileRefsCfg fileInfo = new FileRefsCfg();
         
-        int count = xpu.getNodeCount(doc, "/crawler/fileRefs");
+        int count = xpu.getNodeCount(doc, "/crawler/fileInfo");
         if(count == 0) return fileInfo;
-        if(count > 1) throw new Exception("Could not have more than one '/crawler/fileRefs' element.");
+        if(count > 1) throw new Exception("Could not have more than one '/crawler/fileInfo' element.");
 
         // <fileRef> nodes
         fileInfo.fileRef = parseFileRef(doc);
@@ -44,7 +44,7 @@ public class FileRefsParser
     {
         XPathUtils xpu = new XPathUtils();
         
-        NodeList nodes = xpu.getNodeList(doc, "/crawler/fileRefs/fileRef");
+        NodeList nodes = xpu.getNodeList(doc, "/crawler/fileInfo/fileRef");
         if(nodes == null || nodes.getLength() == 0) return null;
         
         List<FileRefsCfg.FileRefCfg> list = new ArrayList<>();
@@ -54,8 +54,8 @@ public class FileRefsParser
             rule.prefix = XmlDomUtils.getAttribute(nodes.item(i), "replacePrefix");
             rule.replacement = XmlDomUtils.getAttribute(nodes.item(i), "with");
             
-            if(rule.prefix == null) throw new Exception("'/crawler/fileRefs/fileRef' missing 'replacePrefix' attribute");
-            if(rule.replacement == null) throw new Exception("'/crawler/fileRefs/fileRef' missing 'with' attribute");
+            if(rule.prefix == null) throw new Exception("'/crawler/fileInfo/fileRef' missing 'replacePrefix' attribute");
+            if(rule.replacement == null) throw new Exception("'/crawler/fileInfo/fileRef' missing 'with' attribute");
             
             list.add(rule);
         }

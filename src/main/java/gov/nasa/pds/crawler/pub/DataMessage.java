@@ -7,4 +7,5 @@ public class DataMessage
     public String node;
     public String rid;
     public List<String> fref;
+    public String file;
 }

@@ -1,7 +1,11 @@
 package gov.nasa.pds.crawler;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.jar.Attributes;
 
 import org.apache.commons.cli.CommandLine;
@@ -102,9 +106,15 @@ public class CrawlerCli
                 return false;
             }
             
+            String runId = UUID.randomUUID().toString();
+            
             // NOTE: !!! Init logger before creating commands !!!
-            initLogger(cmdLine);
-            initCommands();
+            if(!cmdLine.hasOption("help"))
+            {
+                initLogger(cmdLine, runId);
+            }
+            
+            initCommands(runId);
             
             this.command = commands.get(args[0]);
             if(this.command == null)
@@ -159,7 +169,7 @@ public class CrawlerCli
         System.out.println();
         System.out.println("Options:");
         System.out.println("  -help           Print help for a command");
-        System.out.println("  -l <file>       Log file. Default is /tmp/crawler/crawler.log");
+        System.out.println("  -l <dir>        Log directory. Default is /tmp/crawler/");
         System.out.println("  -v <level>      Logger verbosity: DEBUG, INFO (default), WARN, ERROR");
         
         System.out.println();
@@ -171,10 +181,10 @@ public class CrawlerCli
     /**
      * Initialize all CLI commands
      */
-    private void initCommands()
+    private void initCommands(String runId)
     {
         commands = new HashMap<>();
-        commands.put("crawl", new CrawlCmd());
+        commands.put("crawl", new CrawlCmd(runId));
     }
     
     /**
@@ -200,12 +210,17 @@ public class CrawlerCli
     /**
      * Initialize Log4j logger
      */
-    private void initLogger(CommandLine cmdLine)
+    private void initLogger(CommandLine cmdLine, String runId)
     {
         String verbosity = cmdLine.getOptionValue("v", "INFO");
-        String logFile = cmdLine.getOptionValue("l");
+        
+        File logDir = new File(cmdLine.getOptionValue("l", "/tmp/crawler"));
+        logDir.mkdirs();        
 
-        Log4jConfigurator.configure(verbosity, logFile);
+        String date = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
+        File logFile = new File(logDir, date + "-" + runId + ".log");
+
+        Log4jConfigurator.configure(verbosity, logFile.getAbsolutePath());
     }
 
     

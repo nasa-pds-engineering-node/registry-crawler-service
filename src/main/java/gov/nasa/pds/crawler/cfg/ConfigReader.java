@@ -8,9 +8,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import gov.nasa.pds.crawler.cfg.model.Configuration;
+import gov.nasa.pds.crawler.cfg.parser.BundleConfigParser;
 import gov.nasa.pds.crawler.cfg.parser.DirsParser;
 import gov.nasa.pds.crawler.cfg.parser.FileRefsParser;
+import gov.nasa.pds.crawler.cfg.parser.FiltersParser;
 import gov.nasa.pds.crawler.cfg.parser.NodeNameValidator;
+import gov.nasa.pds.crawler.cfg.parser.RegistryConfigParser;
 import gov.nasa.pds.crawler.util.xml.XmlDomUtils;
 
 
@@ -23,6 +26,7 @@ public class ConfigReader
 {
     private static final String ERROR = "Invalid Crawler configuration: ";
     
+    private int bundlesCount = 0;
     private int dirsCount = 0;
     
 
@@ -58,9 +62,12 @@ public class ConfigReader
         
         validate(root);
         
+        cfg.registryCfg = RegistryConfigParser.parseRegistry(root);
+        
+        if(bundlesCount > 0) cfg.bundles = BundleConfigParser.parseBundles(root);
         if(dirsCount > 0) cfg.dirs = DirsParser.parseDirectories(root);
         
-        //cfg.filters = FiltersParser.parseFilters(doc);
+        cfg.filters = FiltersParser.parseFilters(doc);
         cfg.fileRefs = FileRefsParser.parseFileInfo(doc);
 
         return cfg;
@@ -84,14 +91,17 @@ public class ConfigReader
                 String name = node.getNodeName();
                 switch(name)
                 {
-                case "crawler":
+                case "registry":
                     break;
                 case "directories":
                     dirsCount++;
                     break;
+                case "bundles":
+                    bundlesCount++;
+                    break;
                 case "productFilter":
                     break;
-                case "fileRefs":
+                case "fileInfo":
                     break;
                 default:
                     throw new Exception(ERROR + "Invalid XML element '/crawler/" + name + "'");
