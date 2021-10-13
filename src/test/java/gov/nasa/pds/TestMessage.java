@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
-import gov.nasa.pds.crawler.pub.DataMessage;
+import gov.nasa.pds.crawler.mq.DataMessage;
 
 public class TestMessage
 {

@@ -1,4 +1,4 @@
-package gov.nasa.pds.crawler.pub;
+package gov.nasa.pds.crawler.mq;
 
 import java.util.List;
 

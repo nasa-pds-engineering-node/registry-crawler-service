@@ -39,6 +39,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
+import gov.nasa.pds.crawler.util.ExceptionUtils;
+
 
 public class TestRabbitMQ
 {
@@ -92,13 +94,22 @@ public class TestRabbitMQ
         channel.basicQos(1);
         HarvestConsumer consumer = new HarvestConsumer(channel);
         
-        channel.basicConsume(QUEUE_NAME, false, consumer);
+        try
+        {
+            channel.basicConsume(QUEUE_NAME, false, consumer);
+        }
+        catch(Exception ex)
+        {
+            System.out.println("[ERROR] " + ExceptionUtils.getMessage(ex));
+            //channel.close();
+            con.close();
+        }
         
         System.out.println("Done.");
         
-        System.in.read();
-        channel.close();
-        con.close();
+        //System.in.read();
+        //channel.close();
+        //con.close();
     }
 
 }
