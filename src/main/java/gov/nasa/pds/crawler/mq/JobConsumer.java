@@ -10,7 +10,9 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.MessageProperties;
 
+import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.JobMessage;
 
@@ -57,7 +59,8 @@ public class JobConsumer extends DefaultConsumer
             DirectoryMessage dirMsg = new DirectoryMessage(jobMsg.id, dir);
             String jsonStr = gson.toJson(dirMsg);
             
-            getChannel().basicPublish("", "q.dirs", null, jsonStr.getBytes());
+            getChannel().basicPublish("", Constants.MQ_DIRS, 
+                    MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
         }
     }
 }

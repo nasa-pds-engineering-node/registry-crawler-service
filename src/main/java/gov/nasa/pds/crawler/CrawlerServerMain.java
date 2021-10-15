@@ -65,7 +65,7 @@ public class CrawlerServerMain
             CrawlerServer server = new CrawlerServer(cmdLine.getOptionValue("c"));
             return server;
         }
-        catch(ParseException ex)
+        catch(Exception ex)
         {
             System.out.println("[ERROR] " + ex.getMessage());
             System.exit(1);

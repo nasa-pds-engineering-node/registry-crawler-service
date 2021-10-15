@@ -17,8 +17,11 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.MessageProperties;
 
+import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
+import gov.nasa.pds.crawler.mq.msg.FilesMessage;
 import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 import gov.nasa.pds.crawler.util.xml.PdsLabelInfo;
@@ -28,7 +31,7 @@ import gov.nasa.pds.crawler.util.xml.PdsLabelInfoParser;
 public class DirectoryConsumer extends DefaultConsumer
 {
     private Logger log;
-    private int batchSize = 20;
+    private int batchSize = Constants.FILES_MESSAGE_MAX_ITEMS;
     private Gson gson;
     private PdsLabelInfoParser labelInfoParser;
     
@@ -44,10 +47,12 @@ public class DirectoryConsumer extends DefaultConsumer
             lidvids = new ArrayList<>(batchSize);
         }
         
-        public void add(String path, String lidvid)
+        public void add(String path, PdsLabelInfo info)
         {
+            if(info == null) return;
+            
             paths.add(path);
-            lidvids.add(lidvid);
+            lidvids.add(info.lidvid);
         }
         
         public int size()
@@ -117,18 +122,18 @@ public class DirectoryConsumer extends DefaultConsumer
                         PdsLabelInfo info = getFileInfo(strPath);
                         if(info == null) continue;
                         
-                        fileBatch.add(strPath, info.lidvid);
+                        fileBatch.add(strPath, info);
                         
                         if(fileBatch.size() >= batchSize)
                         {
-                            processFileBatch(fileBatch);
+                            processFileBatch(dirMsg.jobId, fileBatch);
                             fileBatch.clear();
                         }
                     }
                 }
             }
             
-            processFileBatch(fileBatch);
+            processFileBatch(dirMsg.jobId, fileBatch);
         }
         finally
         {
@@ -154,11 +159,17 @@ public class DirectoryConsumer extends DefaultConsumer
     }
     
     
-    private void processFileBatch(FileBatch batch) throws IOException
+    private void processFileBatch(String jobId, FileBatch batch) throws IOException
     {
         if(batch.size() == 0) return;
         
-        System.out.println(batch.size());
+        FilesMessage msg = new FilesMessage(jobId);
+        msg.files = batch.paths;
+        msg.ids = batch.lidvids;
+        String jsonStr = gson.toJson(msg);
+        
+        getChannel().basicPublish("", Constants.MQ_FILES, 
+                MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
     }
 
     
@@ -166,9 +177,10 @@ public class DirectoryConsumer extends DefaultConsumer
     {
         String strPath = path.toAbsolutePath().toString();
         
-        DirectoryMessage newDirMsg = new DirectoryMessage(jobId, strPath);
-        String jsonStr = gson.toJson(newDirMsg);
+        DirectoryMessage msg = new DirectoryMessage(jobId, strPath);
+        String jsonStr = gson.toJson(msg);
         
-        getChannel().basicPublish("", "q.dirs", null, jsonStr.getBytes());
+        getChannel().basicPublish("", Constants.MQ_DIRS, 
+                MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
     }
 }

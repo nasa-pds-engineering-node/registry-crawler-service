@@ -32,6 +32,7 @@ package gov.nasa.pds.rmq;
 
 import java.io.IOException;
 
+import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -39,16 +40,17 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
+import gov.nasa.pds.crawler.Constants;
+import gov.nasa.pds.crawler.mq.msg.FilesMessage;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
 
 public class TestRabbitMQ
 {
-    private static final String QUEUE_NAME = "harvest";
-
-    
     private static class HarvestConsumer extends DefaultConsumer
     {
+        Gson gson = new Gson();
+        
         public HarvestConsumer(Channel channel)
         {
             super(channel);
@@ -59,8 +61,10 @@ public class TestRabbitMQ
                 AMQP.BasicProperties properties, byte[] body) throws IOException
         {
             long deliveryTag = envelope.getDeliveryTag();
-            String msg = new String(body);
-            System.out.println(msg);
+            String json = new String(body);
+            FilesMessage msg = gson.fromJson(json, FilesMessage.class);
+            
+            System.out.println(msg.files.size() + ", " + json.length());
 
             getChannel().basicAck(deliveryTag, false);
         }
@@ -79,7 +83,7 @@ public class TestRabbitMQ
         ConnectionFactory factory = new ConnectionFactory();
         Connection con = factory.newConnection();
         Channel channel = con.createChannel();
-        channel.basicPublish("", QUEUE_NAME, null, "test".getBytes());
+        channel.basicPublish("", "test", null, "test".getBytes());
         
         channel.close();
         con.close();
@@ -96,7 +100,7 @@ public class TestRabbitMQ
         
         try
         {
-            channel.basicConsume(QUEUE_NAME, false, consumer);
+            channel.basicConsume(Constants.MQ_FILES, false, consumer);
         }
         catch(Exception ex)
         {
