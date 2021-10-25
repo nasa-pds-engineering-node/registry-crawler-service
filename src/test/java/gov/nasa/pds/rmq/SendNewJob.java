@@ -20,7 +20,7 @@ public class SendNewJob
 
         // Create message
         JobMessage msg = new JobMessage();
-        msg.id = "123";
+        msg.jobId = "123";
         msg.dirs = Arrays.asList("/ws3/OREX/orex_spice");
         Gson gson = new Gson();
         String jsonStr = gson.toJson(msg);

@@ -14,6 +14,7 @@ import com.rabbitmq.client.MessageProperties;
 
 import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
+import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
 import gov.nasa.pds.crawler.mq.msg.JobMessage;
 
 
@@ -50,13 +51,13 @@ public class JobConsumer extends DefaultConsumer
     
     private void processMessage(JobMessage jobMsg) throws IOException
     {
-        log.info("Processing job " + jobMsg.id);
+        log.info("Processing job " + jobMsg.jobId);
         
         if(jobMsg.dirs == null) return;
         
         for(String dir: jobMsg.dirs)
         {
-            DirectoryMessage dirMsg = new DirectoryMessage(jobMsg.id, dir);
+            DirectoryMessage dirMsg = DirectoryMessageBuilder.create(jobMsg, dir);
             String jsonStr = gson.toJson(dirMsg);
             
             getChannel().basicPublish("", Constants.MQ_DIRS, 

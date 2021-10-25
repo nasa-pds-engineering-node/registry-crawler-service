@@ -41,7 +41,7 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
 import gov.nasa.pds.crawler.Constants;
-import gov.nasa.pds.crawler.mq.msg.FilesMessage;
+import gov.nasa.pds.crawler.mq.msg.FileMessage;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
 
@@ -62,7 +62,7 @@ public class TestRabbitMQ
         {
             long deliveryTag = envelope.getDeliveryTag();
             String json = new String(body);
-            FilesMessage msg = gson.fromJson(json, FilesMessage.class);
+            FileMessage msg = gson.fromJson(json, FileMessage.class);
             
             System.out.println(msg.files.size() + ", " + json.length());
 

@@ -15,6 +15,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import gov.nasa.pds.crawler.mq.JobConsumer;
 import gov.nasa.pds.crawler.cfg.Configuration;
 import gov.nasa.pds.crawler.cfg.ConfigurationReader;
+import gov.nasa.pds.crawler.cfg.IPAddress;
 import gov.nasa.pds.crawler.http.StatusHandler;
 import gov.nasa.pds.crawler.mq.DirectoryConsumer;
 import gov.nasa.pds.crawler.util.CloseUtils;
@@ -35,6 +36,11 @@ public class CrawlerServer
     private Connection rmqConnection;
     
 
+    /**
+     * Constructor
+     * @param cfgFilePath configuration file path
+     * @throws Exception an exception
+     */
     public CrawlerServer(String cfgFilePath) throws Exception
     {
         log = LogManager.getLogger(this.getClass());
@@ -51,6 +57,9 @@ public class CrawlerServer
     }
     
     
+    /**
+     * Run the server
+     */
     public void run()
     {
         connectToRabbitMQ();
@@ -69,6 +78,10 @@ public class CrawlerServer
     }
     
     
+    /**
+     * Start job message consumer
+     * @throws Exception an exception
+     */
     private void startJobConsumer() throws Exception
     {
         Channel channel = rmqConnection.createChannel();
@@ -81,6 +94,10 @@ public class CrawlerServer
     }
     
     
+    /**
+     * Start directory message consumer 
+     * @throws Exception an exception
+     */
     private void startDirectoryConsumer() throws Exception
     {
         Channel channel = rmqConnection.createChannel();
@@ -93,6 +110,10 @@ public class CrawlerServer
     }
     
     
+    /**
+     * Start embedded web server
+     * @param port a port to listen for incoming connections
+     */
     private void startWebServer(int port)
     {
         Undertow.Builder bld = Undertow.builder();
@@ -106,10 +127,16 @@ public class CrawlerServer
     }
 
     
+    /**
+     * Connect to RabbitMQ server. Wait until RabbitMQ is up. 
+     */
     private void connectToRabbitMQ()
     {
         List<Address> rmqAddr = new ArrayList<>();
-        rmqAddr.add(new Address("localhost", 5672));
+        for(IPAddress ipa: cfg.mqAddresses)
+        {
+            rmqAddr.add(new Address(ipa.getHost(), ipa.getPort()));
+        }
         
         while(true)
         {
