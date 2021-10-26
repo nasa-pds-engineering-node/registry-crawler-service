@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/big-data-crawler-server/tree/v1.0.0-SNAPSHOT) (2021-10-15)
+## [v1.0.0-SNAPSHOT](https://github.com/NASA-PDS/big-data-crawler-server/tree/v1.0.0-SNAPSHOT) (2021-10-25)
 
 [Full Changelog](https://github.com/NASA-PDS/big-data-crawler-server/compare/e5bc1897d0dbe974f5790094019612b3503cb5b9...v1.0.0-SNAPSHOT)
 
