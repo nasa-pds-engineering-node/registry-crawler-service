@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.servlet.ServletHandler;
 
 import com.rabbitmq.client.Address;
 import com.rabbitmq.client.Channel;
@@ -16,11 +19,10 @@ import gov.nasa.pds.crawler.mq.JobConsumer;
 import gov.nasa.pds.crawler.cfg.Configuration;
 import gov.nasa.pds.crawler.cfg.ConfigurationReader;
 import gov.nasa.pds.crawler.cfg.IPAddress;
-import gov.nasa.pds.crawler.http.StatusHandler;
+import gov.nasa.pds.crawler.http.StatusServlet;
 import gov.nasa.pds.crawler.mq.DirectoryConsumer;
 import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
-import io.undertow.Undertow;
 
 
 /**
@@ -114,13 +116,22 @@ public class CrawlerServer
      * Start embedded web server
      * @param port a port to listen for incoming connections
      */
-    private void startWebServer(int port)
+    private void startWebServer(int port) throws Exception
     {
-        Undertow.Builder bld = Undertow.builder();
-        bld.addHttpListener(port, "0.0.0.0");
-        bld.setHandler(new StatusHandler());
+        Server server = new Server();
+        
+        // HTTP connector
+        ServerConnector connector = new ServerConnector(server);
+        connector.setHost("0.0.0.0");
+        connector.setPort(port);
+        server.addConnector(connector);
 
-        Undertow server = bld.build();
+        // Servlet handler
+        ServletHandler handler = new ServletHandler();
+        handler.addServletWithMapping(StatusServlet.class, "/*");
+        server.setHandler(handler);
+        
+        // Start web server
         server.start();
         
         log.info("Started web server on port " + port);
