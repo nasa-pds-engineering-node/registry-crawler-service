@@ -1,10 +1,19 @@
 package gov.nasa.pds.crawler.cfg;
 
+/**
+ * RabbitMQ address. Host and port tuple.
+ * @author karpenko
+ */
 public class IPAddress
 {
     private String host;
     private int port;
 
+    /**
+     * Constructor
+     * @param host a host, such as "localhost"
+     * @param port a port, such as 5672
+     */
     public IPAddress(String host, int port)
     {
         this.host = host;

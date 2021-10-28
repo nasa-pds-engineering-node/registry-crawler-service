@@ -18,6 +18,8 @@ import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.MessageProperties;
 
 import gov.nasa.pds.crawler.Constants;
+import gov.nasa.pds.crawler.meta.PdsLabelInfo;
+import gov.nasa.pds.crawler.meta.PdsLabelInfoParser;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
 import gov.nasa.pds.crawler.mq.msg.FileBatch;
@@ -25,8 +27,6 @@ import gov.nasa.pds.crawler.mq.msg.FileMessage;
 import gov.nasa.pds.crawler.mq.msg.FileMessageBuilder;
 import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
-import gov.nasa.pds.crawler.util.xml.PdsLabelInfo;
-import gov.nasa.pds.crawler.util.xml.PdsLabelInfoParser;
 
 
 /**
@@ -207,7 +207,7 @@ public class DirectoryConsumer extends DefaultConsumer
         FileMessage msg = FileMessageBuilder.create(dirMsg, batch);
         String jsonStr = gson.toJson(msg);
         
-        getChannel().basicPublish("", Constants.MQ_FILES, 
+        getChannel().basicPublish("", Constants.MQ_PRODUCTS, 
                 MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
     }
 

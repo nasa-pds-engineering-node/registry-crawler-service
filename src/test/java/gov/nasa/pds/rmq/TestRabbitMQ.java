@@ -100,7 +100,7 @@ public class TestRabbitMQ
         
         try
         {
-            channel.basicConsume(Constants.MQ_FILES, false, consumer);
+            channel.basicConsume(Constants.MQ_PRODUCTS, false, consumer);
         }
         catch(Exception ex)
         {

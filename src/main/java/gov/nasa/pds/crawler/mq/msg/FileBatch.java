@@ -3,7 +3,8 @@ package gov.nasa.pds.crawler.mq.msg;
 import java.util.ArrayList;
 import java.util.List;
 
-import gov.nasa.pds.crawler.util.xml.PdsLabelInfo;
+import gov.nasa.pds.crawler.meta.PdsLabelInfo;
+
 
 /**
  * Collection of files for Harvest server to process.

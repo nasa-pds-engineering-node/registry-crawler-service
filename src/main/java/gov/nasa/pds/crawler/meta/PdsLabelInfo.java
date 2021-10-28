@@ -1,5 +1,9 @@
-package gov.nasa.pds.crawler.util.xml;
+package gov.nasa.pds.crawler.meta;
 
+/**
+ * Basic PDS label file information
+ * @author karpenko
+ */
 public class PdsLabelInfo
 {
     public String productClass;
