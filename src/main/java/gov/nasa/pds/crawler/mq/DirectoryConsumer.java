@@ -55,6 +55,12 @@ public class DirectoryConsumer extends DefaultConsumer
     }
 
     
+    public void start() throws Exception
+    {
+        getChannel().basicConsume(Constants.MQ_DIRS, false, this);
+    }
+    
+    
     /**
      * Handle delivery of a new message from the directory queue
      */

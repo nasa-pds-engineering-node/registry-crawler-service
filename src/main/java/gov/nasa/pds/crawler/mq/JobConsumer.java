@@ -33,6 +33,12 @@ public class JobConsumer extends DefaultConsumer
     }
 
     
+    public void start() throws Exception
+    {
+        getChannel().basicConsume(Constants.MQ_JOBS, false, this);
+    }
+    
+    
     @Override
     public void handleDelivery(String consumerTag, Envelope envelope, 
             AMQP.BasicProperties properties, byte[] body) throws IOException
