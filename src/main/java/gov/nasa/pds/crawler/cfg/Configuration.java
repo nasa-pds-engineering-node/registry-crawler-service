@@ -1,11 +1,29 @@
 package gov.nasa.pds.crawler.cfg;
 
-import java.util.ArrayList;
-import java.util.List;
 
-
+/**
+ * Crawler server configuration parameters
+ * @author karpenko
+ */
 public class Configuration
 {
-    public List<IPAddress> mqAddresses = new ArrayList<>();
+    /**
+     * Message server type
+     */
+    public MQType mqType;
+    
+    /**
+     * ActiveMQ configuration
+     */
+    public ActiveMQCfg amqCfg = new ActiveMQCfg();
+    
+    /**
+     * RabbitMQ configuration
+     */
+    public RabbitMQCfg rmqCfg = new RabbitMQCfg();
+
+    /**
+     * Embedded web server port
+     */
     public int webPort;
 }

@@ -56,6 +56,12 @@ public class CrawlerServer
         // Init RabbitMQ connection factory
         rmqConFactory = new ConnectionFactory();
         rmqConFactory.setAutomaticRecoveryEnabled(true);
+        
+        if(cfg.rmqCfg.userName != null)
+        {
+            rmqConFactory.setUsername(cfg.rmqCfg.userName);
+            rmqConFactory.setPassword(cfg.rmqCfg.password);
+        }
     }
     
     
@@ -143,12 +149,25 @@ public class CrawlerServer
      */
     private void connectToRabbitMQ()
     {
+        // Get the list of RabbitMQ addresses as a string for logging
+        StringBuilder bld = new StringBuilder();
+        for(int i = 0; i < cfg.rmqCfg.addresses.size(); i++)
+        {
+            if(i != 0) bld.append(", ");
+            IPAddress ipa = cfg.rmqCfg.addresses.get(i);
+            bld.append(ipa.getHost() + ":" + ipa.getPort());
+        }
+        
+        log.info("Connecting to RabbitMQ at " + bld.toString());
+        
+        // Convert configuration model classes to RabbitMQ model classes
         List<Address> rmqAddr = new ArrayList<>();
-        for(IPAddress ipa: cfg.mqAddresses)
+        for(IPAddress ipa: cfg.rmqCfg.addresses)
         {
             rmqAddr.add(new Address(ipa.getHost(), ipa.getPort()));
         }
         
+        // Wait for RabbitMQ
         while(true)
         {
             try
@@ -158,7 +177,8 @@ public class CrawlerServer
             }
             catch(Exception ex)
             {
-                log.warn("Could not connect to RabbitMQ. " + ex + ". Will retry in 10 sec.");
+                String msg = ExceptionUtils.getMessage(ex);
+                log.warn("Could not connect to RabbitMQ. " + msg + ". Will retry in 10 sec.");
                 sleepSec(10);
             }
         }

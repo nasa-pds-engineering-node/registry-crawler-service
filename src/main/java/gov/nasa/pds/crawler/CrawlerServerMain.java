@@ -9,7 +9,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 
 import gov.nasa.pds.crawler.util.ManifestUtils;
 import gov.nasa.pds.crawler.util.log.Log4jConfigurator;
