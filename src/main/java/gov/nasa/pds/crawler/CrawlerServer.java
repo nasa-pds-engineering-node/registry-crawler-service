@@ -11,12 +11,12 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import gov.nasa.pds.crawler.mq.MQClient;
-import gov.nasa.pds.crawler.mq.RabbitMQClient;
+import gov.nasa.pds.crawler.mq.rmq.RabbitMQClient;
 import gov.nasa.pds.crawler.cfg.Configuration;
 import gov.nasa.pds.crawler.cfg.ConfigurationReader;
 import gov.nasa.pds.crawler.http.MemoryServlet;
 import gov.nasa.pds.crawler.http.StatusServlet;
-import gov.nasa.pds.crawler.mq.ActiveMQClient;
+import gov.nasa.pds.crawler.mq.amq.ActiveMQClient;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
 

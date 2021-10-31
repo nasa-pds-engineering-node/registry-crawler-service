@@ -12,9 +12,9 @@ public class FileMessageBuilder
      * @param batch file batch
      * @return new file message
      */
-    public static FileMessage create(DirectoryMessage dirMsg, FileBatch batch)
+    public static ProductMessage create(DirectoryMessage dirMsg, FileBatch batch)
     {
-        FileMessage msg = new FileMessage();
+        ProductMessage msg = new ProductMessage();
         
         msg.jobId = dirMsg.jobId;
         msg.nodeName = dirMsg.nodeName;

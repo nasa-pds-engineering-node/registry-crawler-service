@@ -1,4 +1,4 @@
-package gov.nasa.pds.crawler.mq;
+package gov.nasa.pds.crawler.mq.rmq;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import com.rabbitmq.client.ConnectionFactory;
 
 import gov.nasa.pds.crawler.cfg.IPAddress;
 import gov.nasa.pds.crawler.cfg.RabbitMQCfg;
+import gov.nasa.pds.crawler.mq.MQClient;
 import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
@@ -91,12 +92,12 @@ public class RabbitMQClient implements MQClient
         connect();
 
         // Start job Consumer
-        JobConsumer jobConsumer = createJobConsumer();
+        JobConsumerRabbitMQ jobConsumer = createJobConsumer();
         jobConsumer.start();
         log.info("Started job consumer");
 
         // Start directory consumer
-        DirectoryConsumer dirConsumer = createDirectoryConsumer();
+        DirectoryConsumerRabbitMQ dirConsumer = createDirectoryConsumer();
         dirConsumer.start();
         log.info("Started directory consumer");
     }
@@ -144,22 +145,22 @@ public class RabbitMQClient implements MQClient
     }
     
     
-    public JobConsumer createJobConsumer() throws Exception
+    public JobConsumerRabbitMQ createJobConsumer() throws Exception
     {
         Channel channel = connection.createChannel();
         channel.basicQos(1);
         
-        JobConsumer consumer = new JobConsumer(channel);
+        JobConsumerRabbitMQ consumer = new JobConsumerRabbitMQ(channel);
         return consumer;
     }
     
     
-    public DirectoryConsumer createDirectoryConsumer() throws Exception
+    public DirectoryConsumerRabbitMQ createDirectoryConsumer() throws Exception
     {
         Channel channel = connection.createChannel();
         channel.basicQos(1);
         
-        DirectoryConsumer consumer = new DirectoryConsumer(channel);
+        DirectoryConsumerRabbitMQ consumer = new DirectoryConsumerRabbitMQ(channel);
         return consumer;
     }
     

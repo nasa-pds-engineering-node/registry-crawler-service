@@ -1,4 +1,4 @@
-package gov.nasa.pds.crawler.mq;
+package gov.nasa.pds.crawler.mq.amq;
 
 import java.io.IOException;
 

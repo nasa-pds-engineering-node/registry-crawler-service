@@ -1,4 +1,4 @@
-package gov.nasa.pds.crawler.mq;
+package gov.nasa.pds.crawler.mq.amq;
 
 import javax.jms.Connection;
 
@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import gov.nasa.pds.crawler.cfg.ActiveMQCfg;
+import gov.nasa.pds.crawler.mq.MQClient;
 
 /**
  * ActiveMQ connection
@@ -21,6 +22,9 @@ public class ActiveMQClient implements MQClient
     private ActiveMQListener listener;
     private Connection con;
 
+    private JobConsumerActiveMQ jobConsumer;
+    private DirectoryConsumerActiveMQ dirConsumer;
+    
     
     /**
      * Constructor
@@ -86,10 +90,18 @@ public class ActiveMQClient implements MQClient
     {
         connect();
         
-        //startJobConsumer();
-        //startDirectoryConsumer();
+        // Start job consumer
+        jobConsumer = new JobConsumerActiveMQ(con);
+        jobConsumer.start();
+        log.info("Started job consumer");
         
-        Thread.currentThread().join();
+        // Start directory consumer
+        dirConsumer = new DirectoryConsumerActiveMQ(con);
+        dirConsumer.start();
+        log.info("Started directory consumer");
+        
+        jobConsumer.join();
+        dirConsumer.join();
     }
 
     

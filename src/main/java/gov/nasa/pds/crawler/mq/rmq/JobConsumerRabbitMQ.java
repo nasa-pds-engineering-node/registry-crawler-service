@@ -1,4 +1,4 @@
-package gov.nasa.pds.crawler.mq;
+package gov.nasa.pds.crawler.mq.rmq;
 
 import java.io.IOException;
 
@@ -18,13 +18,13 @@ import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
 import gov.nasa.pds.crawler.mq.msg.JobMessage;
 
 
-public class JobConsumer extends DefaultConsumer
+public class JobConsumerRabbitMQ extends DefaultConsumer
 {
     private Logger log;
     private Gson gson;
     
     
-    public JobConsumer(Channel channel)
+    public JobConsumerRabbitMQ(Channel channel)
     {
         super(channel);
         log = LogManager.getLogger(this.getClass());
