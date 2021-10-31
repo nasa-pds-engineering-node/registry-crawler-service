@@ -14,8 +14,13 @@ import gov.nasa.pds.crawler.util.ManifestUtils;
 import gov.nasa.pds.crawler.util.log.Log4jConfigurator;
 
 
+/**
+ * Crawler server entry point / main class.
+ * @author karpenko
+ */
 public class CrawlerServerMain
 {
+    
     public static void main(String[] args)
     {
         // We don't use "java.util" logger.
@@ -26,22 +31,26 @@ public class CrawlerServerMain
         if(args.length == 0)
         {
             printHelp();
-            System.exit(0);
+            System.exit(2);
         }
         
         // Print version
         if(args.length == 1 && ("-V".equals(args[0]) || "--version".equals(args[0])))
         {
             printVersion();
-            System.exit(0);
+            System.exit(2);
         }
         
         // Create and start Harvest server
         CrawlerServer server = createServer(args);
-        server.run();
+        int rc = server.run();
+        if(rc > 0) 
+        {
+            System.exit(rc);
+        }
     }
 
-        
+
     private static CrawlerServer createServer(String[] args)
     {
         try

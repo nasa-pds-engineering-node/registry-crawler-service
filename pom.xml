@@ -129,6 +129,12 @@ Go through this file line-by-line and replace the template values with your own.
             <artifactId>amqp-client</artifactId>
             <version>5.13.1</version>
         </dependency>
+        <!-- Active MQ client -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.16.3</version>
+        </dependency>
         <!-- Web server -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>

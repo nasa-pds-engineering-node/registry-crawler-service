@@ -7,13 +7,16 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
-import gov.nasa.pds.crawler.mq.JobConsumer;
+import gov.nasa.pds.crawler.mq.MQClient;
 import gov.nasa.pds.crawler.mq.RabbitMQClient;
 import gov.nasa.pds.crawler.cfg.Configuration;
 import gov.nasa.pds.crawler.cfg.ConfigurationReader;
+import gov.nasa.pds.crawler.http.MemoryServlet;
 import gov.nasa.pds.crawler.http.StatusServlet;
-import gov.nasa.pds.crawler.mq.DirectoryConsumer;
+import gov.nasa.pds.crawler.mq.ActiveMQClient;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
 
@@ -25,7 +28,7 @@ public class CrawlerServer
 {
     private Logger log;
     private Configuration cfg;
-    private RabbitMQClient mqClient;
+    private MQClient mqClient;
 
     /**
      * Constructor
@@ -42,54 +45,50 @@ public class CrawlerServer
         ConfigurationReader cfgReader = new ConfigurationReader();
         cfg = cfgReader.read(file);
         
-        mqClient = new RabbitMQClient(cfg.rmqCfg);
+        mqClient = createMQClient(cfg);
     }
     
     
+    private MQClient createMQClient(Configuration cfg) throws Exception
+    {
+        if(cfg == null || cfg.mqType == null)
+        {
+            throw new Exception("Invalid configuration. Message server type is not set.");
+        }
+        
+        switch(cfg.mqType)
+        {
+        case ActiveMQ:
+            return new ActiveMQClient(cfg.amqCfg);
+        case RabbitMQ:
+            return new RabbitMQClient(cfg.rmqCfg);
+        }
+        
+        throw new Exception("Invalid message server type: " + cfg.mqType);
+    }
+
+
     /**
      * Run the server
+     * @return 0 - server started without errors; 1 or greater - there was an error
      */
-    public void run()
+    public int run()
     {
-        mqClient.connect();
-        
         try
         {
-            startJobConsumer();
-            startDirectoryConsumer();
+            // Start embedded web server
             startWebServer(cfg.webPort);
+            
+            // Start message queue (ActiveMQ or RabbitMQ) client
+            mqClient.run();
         }
         catch(Exception ex)
         {
             log.error(ExceptionUtils.getMessage(ex));
-            mqClient.close();
+            return 1;
         }
-    }
-    
-    
-    /**
-     * Start job message consumer
-     * @throws Exception an exception
-     */
-    private void startJobConsumer() throws Exception
-    {
-        JobConsumer consumer = mqClient.createJobConsumer();
-        consumer.start();
-
-        log.info("Started job consumer");
-    }
-    
-    
-    /**
-     * Start directory message consumer 
-     * @throws Exception an exception
-     */
-    private void startDirectoryConsumer() throws Exception
-    {
-        DirectoryConsumer consumer = mqClient.createDirectoryConsumer();
-        consumer.start();
-
-        log.info("Started directory consumer");
+        
+        return 0;
     }
     
     
@@ -99,7 +98,9 @@ public class CrawlerServer
      */
     private void startWebServer(int port) throws Exception
     {
-        Server server = new Server();
+        // Max threads = 10, min threads = 1
+        QueuedThreadPool threadPool = new QueuedThreadPool(10, 1);
+        Server server = new Server(threadPool);
         
         // HTTP connector
         ServerConnector connector = new ServerConnector(server);
@@ -109,7 +110,13 @@ public class CrawlerServer
 
         // Servlet handler
         ServletHandler handler = new ServletHandler();
-        handler.addServletWithMapping(StatusServlet.class, "/*");
+        
+        // Status servlet
+        ServletHolder statusServlet = new ServletHolder(new StatusServlet(mqClient));
+        handler.addServletWithMapping(statusServlet, "/");
+
+        // Memory servlet
+        handler.addServletWithMapping(MemoryServlet.class, "/memory");
         server.setHandler(handler);
         
         // Start web server

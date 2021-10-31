@@ -16,7 +16,7 @@ import gov.nasa.pds.crawler.cfg.RabbitMQCfg;
 import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
-public class RabbitMQClient
+public class RabbitMQClient implements MQClient
 {
     private Logger log;
     private RabbitMQCfg cfg;
@@ -24,13 +24,23 @@ public class RabbitMQClient
     private ConnectionFactory factory;
     private Connection connection;
     
+    private String connectionInfo;
+    
 
     public RabbitMQClient(RabbitMQCfg cfg)
     {
+        // Get logger
         log = LogManager.getLogger(this.getClass());
         
-        this.cfg = cfg;
+        // Validate and store configuration
+        if(cfg == null || cfg.addresses == null || cfg.addresses.isEmpty()) 
+        {
+            throw new IllegalArgumentException("RabbitMQ address is not set.");
+        }
         
+        this.cfg = cfg;
+
+        // Create connection factory
         factory = new ConnectionFactory();
         factory.setAutomaticRecoveryEnabled(true);
         
@@ -39,17 +49,8 @@ public class RabbitMQClient
             factory.setUsername(cfg.userName);
             factory.setPassword(cfg.password);
         }
-    }
-    
-    
-    /**
-     * Connect to RabbitMQ server. Wait until RabbitMQ is up. 
-     */
-    public void connect()
-    {
-        if(connection != null) return;
         
-        // Get the list of RabbitMQ addresses as a string for logging
+        // Build connection info string
         StringBuilder bld = new StringBuilder();
         for(int i = 0; i < cfg.addresses.size(); i++)
         {
@@ -58,7 +59,57 @@ public class RabbitMQClient
             bld.append(ipa.getHost() + ":" + ipa.getPort());
         }
         
-        log.info("Connecting to RabbitMQ at " + bld.toString());
+        this.connectionInfo = bld.toString();        
+    }
+
+    
+    @Override
+    public String getType()
+    {
+        return "RabbitMQ";
+    }
+
+    
+    @Override
+    public String getConnectionInfo()
+    {
+        return connectionInfo;
+    }
+
+    
+    @Override
+    public boolean isConnected()
+    {
+        return true;
+    }
+
+    
+    @Override
+    public void run() throws Exception
+    {
+        // Connect to RabbitMQ (wait until RabbitMQ is up)
+        connect();
+
+        // Start job Consumer
+        JobConsumer jobConsumer = createJobConsumer();
+        jobConsumer.start();
+        log.info("Started job consumer");
+
+        // Start directory consumer
+        DirectoryConsumer dirConsumer = createDirectoryConsumer();
+        dirConsumer.start();
+        log.info("Started directory consumer");
+    }
+
+    
+    /**
+     * Connect to RabbitMQ server. Wait until RabbitMQ is up. 
+     */
+    public void connect()
+    {
+        if(connection != null) return;
+        
+        log.info("Connecting to RabbitMQ at " + connectionInfo);
         
         // Convert configuration model classes to RabbitMQ model classes
         List<Address> rmqAddr = new ArrayList<>();
@@ -86,7 +137,7 @@ public class RabbitMQClient
         log.info("Connected to RabbitMQ");
     }
 
-
+    
     public void close()
     {
         CloseUtils.close(connection);    
