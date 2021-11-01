@@ -21,7 +21,7 @@ import gov.nasa.pds.crawler.util.ExceptionUtils;
 
 
 /**
- * Harvest server
+ * Crawler server
  * @author karpenko
  */
 public class CrawlerServer

@@ -22,7 +22,10 @@ import gov.nasa.pds.crawler.mq.msg.FileMessageBuilder;
 import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
-
+/**
+ * Process Directory Messages
+ * @author karpenko
+ */
 public class DirectoryProcessor
 {
     private Logger log;
@@ -32,6 +35,10 @@ public class DirectoryProcessor
     private MQPublisher publisher;
     
     
+    /**
+     * Constructor
+     * @param publisher message queue publisher
+     */
     public DirectoryProcessor(MQPublisher publisher)
     {
         log = LogManager.getLogger(this.getClass());

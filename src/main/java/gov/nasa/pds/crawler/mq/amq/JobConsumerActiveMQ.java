@@ -23,6 +23,10 @@ import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
 
+/**
+ * ActiveMQ consumer to process job messages
+ * @author karpenko
+ */
 public class JobConsumerActiveMQ implements Runnable
 {
     private Logger log;
@@ -41,6 +45,11 @@ public class JobConsumerActiveMQ implements Runnable
     private volatile boolean stopRequested = false; 
     
     
+    /**
+     * Constructor
+     * @param connection JMS connection
+     * @throws Exception an exception
+     */
     public JobConsumerActiveMQ(Connection connection) throws Exception
     {
         log = LogManager.getLogger(this.getClass());
@@ -56,6 +65,9 @@ public class JobConsumerActiveMQ implements Runnable
     }
 
     
+    /**
+     * Start consumer thread
+     */
     public void start()
     {
         thread = new Thread(this);
@@ -63,12 +75,19 @@ public class JobConsumerActiveMQ implements Runnable
     }
     
     
+    /**
+     * Stop consumer thread
+     */
     public void stop()
     {
         stopRequested = true;
     }
     
     
+    /**
+     * Join consumer thread
+     * @throws InterruptedException
+     */
     public void join() throws InterruptedException
     {
         thread.join();

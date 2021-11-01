@@ -17,22 +17,32 @@ import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
 import gov.nasa.pds.crawler.mq.msg.JobMessage;
 
-
+/**
+ * RabbitMQ consumer to process job messages
+ * @author karpenko
+ */
 public class JobConsumerRabbitMQ extends DefaultConsumer
 {
     private Logger log;
     private Gson gson;
     
     
+    /**
+     * Constructor
+     * @param channel
+     */
     public JobConsumerRabbitMQ(Channel channel)
     {
         super(channel);
         log = LogManager.getLogger(this.getClass());
-        
         gson = new Gson();
     }
 
     
+    /**
+     * Start consuming messages
+     * @throws Exception
+     */
     public void start() throws Exception
     {
         getChannel().basicConsume(Constants.MQ_JOBS, false, this);

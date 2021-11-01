@@ -10,7 +10,7 @@ import gov.nasa.pds.crawler.cfg.ActiveMQCfg;
 import gov.nasa.pds.crawler.mq.MQClient;
 
 /**
- * ActiveMQ connection
+ * ActiveMQ client
  * @author karpenko
  */
 public class ActiveMQClient implements MQClient

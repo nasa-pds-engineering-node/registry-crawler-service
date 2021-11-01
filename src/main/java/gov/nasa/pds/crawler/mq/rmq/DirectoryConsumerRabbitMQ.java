@@ -46,6 +46,10 @@ public class DirectoryConsumerRabbitMQ extends DefaultConsumer implements MQPubl
     }
 
     
+    /**
+     * Start consuming messages
+     * @throws Exception
+     */
     public void start() throws Exception
     {
         getChannel().basicConsume(Constants.MQ_DIRS, false, this);

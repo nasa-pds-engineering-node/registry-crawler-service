@@ -17,6 +17,10 @@ import gov.nasa.pds.crawler.mq.MQClient;
 import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
+/**
+ * RabbitMQ client
+ * @author karpenko
+ */
 public class RabbitMQClient implements MQClient
 {
     private Logger log;
@@ -28,6 +32,10 @@ public class RabbitMQClient implements MQClient
     private String connectionInfo;
     
 
+    /**
+     * Constructor
+     * @param cfg RabbitMQ configuration
+     */
     public RabbitMQClient(RabbitMQCfg cfg)
     {
         // Get logger
@@ -81,7 +89,14 @@ public class RabbitMQClient implements MQClient
     @Override
     public boolean isConnected()
     {
-        return true;
+        if(connection == null) 
+        {
+            return false;
+        }
+        else
+        {
+            return connection.isOpen();
+        }
     }
 
     
@@ -145,7 +160,7 @@ public class RabbitMQClient implements MQClient
     }
     
     
-    public JobConsumerRabbitMQ createJobConsumer() throws Exception
+    private JobConsumerRabbitMQ createJobConsumer() throws Exception
     {
         Channel channel = connection.createChannel();
         channel.basicQos(1);
@@ -155,7 +170,7 @@ public class RabbitMQClient implements MQClient
     }
     
     
-    public DirectoryConsumerRabbitMQ createDirectoryConsumer() throws Exception
+    private DirectoryConsumerRabbitMQ createDirectoryConsumer() throws Exception
     {
         Channel channel = connection.createChannel();
         channel.basicQos(1);

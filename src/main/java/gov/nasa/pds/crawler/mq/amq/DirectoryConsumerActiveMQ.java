@@ -49,6 +49,8 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
     
     /**
      * Constructor
+     * @param connection JMS connection 
+     * @throws Exception an exception
      */
     public DirectoryConsumerActiveMQ(Connection connection) throws Exception
     {
@@ -70,6 +72,9 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
     }
 
     
+    /**
+     * Start consumer thread
+     */
     public void start()
     {
         thread = new Thread(this);
@@ -77,12 +82,19 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
     }
     
     
+    /**
+     * Stop consumer thread
+     */
     public void stop()
     {
         stopRequested = true;
     }
     
     
+    /**
+     * Join consumer thread
+     * @throws InterruptedException
+     */
     public void join() throws InterruptedException
     {
         thread.join();
