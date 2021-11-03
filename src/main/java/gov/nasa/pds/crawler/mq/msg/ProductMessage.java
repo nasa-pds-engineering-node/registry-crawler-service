@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A message to harvest a batch of files
+ * A message to harvest a batch of product files
  * @author karpenko
  */
 public class ProductMessage

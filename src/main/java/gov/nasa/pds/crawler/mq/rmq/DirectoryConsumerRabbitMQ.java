@@ -14,6 +14,7 @@ import com.rabbitmq.client.MessageProperties;
 
 import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.MQPublisher;
+import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.ProductMessage;
 import gov.nasa.pds.crawler.proc.DirectoryProcessor;
@@ -109,6 +110,15 @@ public class DirectoryConsumerRabbitMQ extends DefaultConsumer implements MQPubl
     {
         String jsonStr = gson.toJson(msg);
         getChannel().basicPublish("", Constants.MQ_PRODUCTS, 
+                MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
+    }
+
+
+    @Override
+    public void publish(CollectionInventoryMessage msg) throws Exception
+    {
+        String jsonStr = gson.toJson(msg);
+        getChannel().basicPublish("", Constants.MQ_COLLECTIONS, 
                 MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
     }
 }

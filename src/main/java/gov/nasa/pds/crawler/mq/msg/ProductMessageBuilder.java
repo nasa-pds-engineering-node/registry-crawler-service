@@ -4,10 +4,10 @@ package gov.nasa.pds.crawler.mq.msg;
  * Helper methods to create File Messages.
  * @author karpenko
  */
-public class FileMessageBuilder
+public class ProductMessageBuilder
 {
     /**
-     * Create new File Message from a Directory Message and a File Batch
+     * Create new Product Message from a Directory Message and a File Batch
      * @param dirMsg directory message
      * @param batch file batch
      * @return new file message

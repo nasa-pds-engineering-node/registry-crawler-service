@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 
 import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.MQPublisher;
+import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.ProductMessage;
 import gov.nasa.pds.crawler.proc.DirectoryProcessor;
@@ -37,13 +38,19 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
 
     private Session session;    
     
+    // Directory messages queue
     private Destination dirQueue;
+    // Product messages queue
     private Destination prodQueue;
+    // Collection inventory messages queue
+    private Destination colQueue;
     
     private MessageConsumer dirConsumer;
+    
     private MessageProducer dirProducer;
     private MessageProducer prodProducer;
-        
+    private MessageProducer colProducer;
+    
     private volatile boolean stopRequested = false; 
 
     
@@ -61,14 +68,22 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
         session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
         dirQueue = session.createQueue(Constants.MQ_DIRS);
         prodQueue = session.createQueue(Constants.MQ_PRODUCTS);
+        colQueue = session.createQueue(Constants.MQ_COLLECTIONS);
         
+        // Directory messages consumer
         dirConsumer = session.createConsumer(dirQueue);
         
+        // Directory messages producer
         dirProducer = session.createProducer(dirQueue);
         dirProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
 
+        // Product messages producer
         prodProducer = session.createProducer(prodQueue);
         prodProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
+        
+        // Collection inventory messages producer
+        colProducer = session.createProducer(colQueue);
+        colProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
     }
 
     
@@ -180,6 +195,15 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
         String jsonStr = gson.toJson(msg);
         TextMessage newMsg = session.createTextMessage(jsonStr);
         prodProducer.send(newMsg);
+    }
+
+
+    @Override
+    public void publish(CollectionInventoryMessage msg) throws Exception
+    {
+        String jsonStr = gson.toJson(msg);
+        TextMessage newMsg = session.createTextMessage(jsonStr);
+        colProducer.send(newMsg);
     }
     
 }

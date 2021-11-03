@@ -2,6 +2,8 @@ package gov.nasa.pds.crawler.http;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.util.jar.Attributes;
 
 import javax.servlet.ServletException;
@@ -14,6 +16,7 @@ import com.google.gson.GsonBuilder;
 
 import gov.nasa.pds.crawler.mq.MQClient;
 import gov.nasa.pds.crawler.util.ManifestUtils;
+
 
 /**
  * A servlet to report status of the Crawler server
@@ -44,6 +47,7 @@ public class StatusServlet extends HttpServlet
         public String mqStatus;
         
         public String usedMemory;
+        public String openFiles;
     }
 
     
@@ -92,6 +96,9 @@ public class StatusServlet extends HttpServlet
         int freeMem = (int)(Runtime.getRuntime().freeMemory() / 1_000_000);
         info.usedMemory = (totalMem - freeMem) + " MB";
         
+        // Open files (Unix only)
+        info.openFiles = numOpenFiles();
+        
         String jsonStr = gson.toJson(info);
 
         resp.setContentType("application/json");
@@ -99,4 +106,19 @@ public class StatusServlet extends HttpServlet
         writer.print(jsonStr);
     }
 
+    
+    private String numOpenFiles()
+    {
+        OperatingSystemMXBean os = ManagementFactory.getOperatingSystemMXBean();
+        
+        if(os instanceof com.sun.management.UnixOperatingSystemMXBean)
+        {
+            com.sun.management.UnixOperatingSystemMXBean unix = (com.sun.management.UnixOperatingSystemMXBean)os; 
+            return String.valueOf(unix.getOpenFileDescriptorCount());
+        }
+        else
+        {
+            return "N/A";
+        }
+    }
 }

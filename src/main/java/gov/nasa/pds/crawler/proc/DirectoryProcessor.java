@@ -11,14 +11,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import gov.nasa.pds.crawler.Constants;
+import gov.nasa.pds.crawler.meta.PdsCollectionInfo;
 import gov.nasa.pds.crawler.meta.PdsLabelInfo;
 import gov.nasa.pds.crawler.meta.PdsLabelInfoParser;
 import gov.nasa.pds.crawler.mq.MQPublisher;
+import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
+import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessageBuilder;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
 import gov.nasa.pds.crawler.mq.msg.FileBatch;
 import gov.nasa.pds.crawler.mq.msg.ProductMessage;
-import gov.nasa.pds.crawler.mq.msg.FileMessageBuilder;
+import gov.nasa.pds.crawler.mq.msg.ProductMessageBuilder;
 import gov.nasa.pds.crawler.util.CloseUtils;
 import gov.nasa.pds.crawler.util.ExceptionUtils;
 
@@ -103,11 +106,18 @@ public class DirectoryProcessor
         // Get PDS label info - LIDVID and product class
         String strPath = path.toAbsolutePath().toString();
         PdsLabelInfo info = getFileInfo(strPath);
+        
         // This is not a PDS label
         if(info == null) return;
         
         // Apply product class filters (declared in the directory message)
         if(skipProductClass(dirMsg, info.productClass)) return;
+        
+        // Collection label
+        if(info instanceof PdsCollectionInfo)
+        {
+            publishCollectionInventory(dirMsg, path, (PdsCollectionInfo)info);
+        }
         
         // Add PDS label info (path and LIDVID) to the batch
         fileBatch.add(strPath, info);
@@ -177,7 +187,7 @@ public class DirectoryProcessor
     {
         if(batch.size() == 0) return;
         
-        ProductMessage newMsg = FileMessageBuilder.create(dirMsg, batch);
+        ProductMessage newMsg = ProductMessageBuilder.create(dirMsg, batch);
         publisher.publish(newMsg);
     }
 
@@ -193,6 +203,15 @@ public class DirectoryProcessor
         String strPath = path.toAbsolutePath().toString();
         
         DirectoryMessage newMsg = DirectoryMessageBuilder.create(dirMsg, strPath);
+        publisher.publish(newMsg);
+    }
+
+    
+    private void publishCollectionInventory(DirectoryMessage dirMsg, Path path, PdsCollectionInfo info) throws Exception
+    {
+        File collectionFile = path.toFile();
+        
+        CollectionInventoryMessage newMsg = CollectionInventoryMessageBuilder.create(dirMsg, collectionFile, info);
         publisher.publish(newMsg);
     }
 

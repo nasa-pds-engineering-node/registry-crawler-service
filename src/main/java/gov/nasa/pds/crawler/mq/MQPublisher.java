@@ -1,5 +1,6 @@
 package gov.nasa.pds.crawler.mq;
 
+import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.ProductMessage;
 
@@ -11,15 +12,22 @@ public interface MQPublisher
 {
     /**
      * Publish directory message
-     * @param dirMsg directory message
+     * @param msg directory message
      * @throws Exception an exception
      */
-    public void publish(DirectoryMessage dirMsg) throws Exception;
-        
+    public void publish(DirectoryMessage msg) throws Exception;
+
     /**
      * Publish product message 
-     * @param newMsg product message
+     * @param msg product message
      * @throws Exception an exception
      */
-    public void publish(ProductMessage newMsg) throws Exception;
+    public void publish(ProductMessage msg) throws Exception;
+    
+    /**
+     * Publish collection inventory message
+     * @param msg collection inventory message
+     * @throws Exception an exception
+     */
+    public void publish(CollectionInventoryMessage msg) throws Exception;
 }
