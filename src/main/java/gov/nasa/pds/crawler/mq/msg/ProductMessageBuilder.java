@@ -19,7 +19,7 @@ public class ProductMessageBuilder
         msg.jobId = dirMsg.jobId;
         msg.nodeName = dirMsg.nodeName;
         msg.dateFields = dirMsg.dateFields;
-        msg.fileRefs = dirMsg.fileRefs;
+        msg.fileRefRules = dirMsg.fileRefs;
         msg.overwrite = dirMsg.overwrite;
 
         msg.files = batch.paths;
