@@ -120,7 +120,7 @@ public class CrawlerServerMain
      */
     public static void printHelp()
     {
-        System.out.println("Usage: crawler <options>");
+        System.out.println("Usage: crawler-server <options>");
         System.out.println();
         System.out.println("Commands:");
         System.out.println("  -c <config file>   Start Crawler server");
