@@ -41,7 +41,7 @@
   <id>bin</id>
 
   <formats>
-    <format>zip</format>
+    <format>tar.gz</format>
   </formats>
 
   <fileSets>
@@ -63,19 +63,6 @@
       <directory>src/main/resources/bin</directory>
       <outputDirectory>bin</outputDirectory>
       <includes>
-        <include>crawler-server.bat</include>
-      </includes>
-      <fileMode>775</fileMode>
-      <lineEnding>dos</lineEnding>
-      <excludes>
-        <exclude>*.formatted</exclude>
-      </excludes>
-    </fileSet>
-
-    <fileSet>
-      <directory>src/main/resources/bin</directory>
-      <outputDirectory>bin</outputDirectory>
-      <includes>
         <include>crawler-server</include>
       </includes>
       <fileMode>775</fileMode>
@@ -86,10 +73,23 @@
     </fileSet>
 
     <fileSet>
+      <directory>src/main/resources/bin</directory>
+      <outputDirectory>bin</outputDirectory>
+      <includes>
+        <include>crawler-server.bat</include>
+      </includes>
+      <fileMode>775</fileMode>
+      <lineEnding>dos</lineEnding>
+      <excludes>
+        <exclude>*.formatted</exclude>
+      </excludes>
+    </fileSet>
+    
+    <fileSet>
       <directory>src/main/resources/conf</directory>
       <outputDirectory>conf</outputDirectory>
       <fileMode>664</fileMode>
-      <lineEnding>dos</lineEnding>
+      <lineEnding>unix</lineEnding>
       <excludes>
         <exclude>*.formatted</exclude>
       </excludes>
@@ -106,7 +106,6 @@
     </file>
     <file>
       <source>README.md</source>
-      <outputDirectory>/</outputDirectory>
       <fileMode>664</fileMode>
       <lineEnding>keep</lineEnding>
       <filtered>true</filtered>
