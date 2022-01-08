@@ -152,16 +152,31 @@ public class JobConsumerActiveMQ implements Runnable
         }
         
         log.info("Processing job " + jobMsg.jobId);
-        
-        if(jobMsg.dirs == null) return;
-        
-        for(String dir: jobMsg.dirs)
+
+        // Directories
+        if(jobMsg.dirs != null)
         {
-            DirectoryMessage dirMsg = DirectoryMessageBuilder.create(jobMsg, dir);
-            jsonStr = gson.toJson(dirMsg);
-            
-            TextMessage mqDirMsg = session.createTextMessage(jsonStr);            
-            dirProducer.send(mqDirMsg);
+            for(String dir: jobMsg.dirs)
+            {
+                DirectoryMessage dirMsg = DirectoryMessageBuilder.createDirectoryMessage(jobMsg, dir);
+                jsonStr = gson.toJson(dirMsg);
+                
+                TextMessage mqDirMsg = session.createTextMessage(jsonStr);            
+                dirProducer.send(mqDirMsg);
+            }
+        }
+
+        // Manifests
+        if(jobMsg.manifests != null)
+        {
+            for(String manifest: jobMsg.manifests)
+            {
+                DirectoryMessage dirMsg = DirectoryMessageBuilder.createManifestMessage(jobMsg, manifest);
+                jsonStr = gson.toJson(dirMsg);
+                
+                TextMessage mqDirMsg = session.createTextMessage(jsonStr);            
+                dirProducer.send(mqDirMsg);
+            }
         }
     }
 }

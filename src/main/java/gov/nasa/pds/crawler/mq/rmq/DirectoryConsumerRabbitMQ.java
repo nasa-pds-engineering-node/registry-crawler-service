@@ -66,17 +66,19 @@ public class DirectoryConsumerRabbitMQ extends DefaultConsumer implements MQPubl
     {
         long deliveryTag = envelope.getDeliveryTag();
 
-        String jsonStr = new String(body);
-        
         DirectoryMessage dirMsg = null;
         
         try
         {
+            String jsonStr = new String(body);
             dirMsg = gson.fromJson(jsonStr, DirectoryMessage.class);
         }
         catch(Exception ex)
         {
-            log.error("Could not parse message: " + jsonStr);
+            log.error("Invalid message", ex);
+
+            // ACK message (delete from the queue)
+            getChannel().basicAck(deliveryTag, false);
             return;
         }
 
@@ -88,6 +90,7 @@ public class DirectoryConsumerRabbitMQ extends DefaultConsumer implements MQPubl
         {
             log.error("Could not process message: " + ExceptionUtils.getMessage(ex));
             getChannel().basicReject(deliveryTag, true);
+            return;
         }
         
         // ACK message (delete from the queue)

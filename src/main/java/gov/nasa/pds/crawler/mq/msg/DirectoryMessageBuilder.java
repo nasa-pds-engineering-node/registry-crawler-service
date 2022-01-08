@@ -12,12 +12,35 @@ public class DirectoryMessageBuilder
      * @param dir directory
      * @return new DirectoryMessage
      */
-    public static DirectoryMessage create(JobMessage jobMsg, String dir)
+    public static DirectoryMessage createDirectoryMessage(JobMessage jobMsg, String dir)
+    {
+        DirectoryMessage msg = create(jobMsg);
+        msg.dir = dir;
+
+        return msg;
+    }
+
+    
+    /**
+     * Create new Directory Message from a Job Message and a manifest file
+     * @param jobMsg job message
+     * @param manifest manifest
+     * @return new DirectoryMessage
+     */
+    public static DirectoryMessage createManifestMessage(JobMessage jobMsg, String manifest)
+    {
+        DirectoryMessage msg = create(jobMsg);
+        msg.manifest = manifest;
+
+        return msg;
+    }
+
+    
+    private static DirectoryMessage create(JobMessage jobMsg)
     {
         DirectoryMessage msg = new DirectoryMessage();
         msg.jobId = jobMsg.jobId;
         msg.nodeName = jobMsg.nodeName;
-        msg.dir = dir;
         msg.prodClassInclude = jobMsg.prodClassInclude;
         msg.prodClassExclude = jobMsg.prodClassExclude;
         msg.dateFields = jobMsg.dateFields;

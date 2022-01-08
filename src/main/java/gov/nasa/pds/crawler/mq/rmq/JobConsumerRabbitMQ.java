@@ -55,9 +55,21 @@ public class JobConsumerRabbitMQ extends DefaultConsumer
     {
         long deliveryTag = envelope.getDeliveryTag();
         
-        String jsonStr = new String(body);
-        JobMessage jobMsg = gson.fromJson(jsonStr, JobMessage.class);
-        
+        JobMessage jobMsg = null;
+        try
+        {
+            String jsonStr = new String(body);
+            jobMsg = gson.fromJson(jsonStr, JobMessage.class);
+        }
+        catch(Exception ex)
+        {
+            log.error("Invalid message", ex);
+
+            // ACK message (delete from the queue)
+            getChannel().basicAck(deliveryTag, false);        
+            return;
+        }
+
         processMessage(jobMsg);
         
         // ACK message (delete from the queue)
@@ -69,15 +81,30 @@ public class JobConsumerRabbitMQ extends DefaultConsumer
     {
         log.info("Processing job " + jobMsg.jobId);
         
-        if(jobMsg.dirs == null) return;
-        
-        for(String dir: jobMsg.dirs)
+        // Directories
+        if(jobMsg.dirs != null)
         {
-            DirectoryMessage dirMsg = DirectoryMessageBuilder.create(jobMsg, dir);
-            String jsonStr = gson.toJson(dirMsg);
-            
-            getChannel().basicPublish("", Constants.MQ_DIRS, 
-                    MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
+            for(String dir: jobMsg.dirs)
+            {
+                DirectoryMessage dirMsg = DirectoryMessageBuilder.createDirectoryMessage(jobMsg, dir);
+                String jsonStr = gson.toJson(dirMsg);
+                
+                getChannel().basicPublish("", Constants.MQ_DIRS, 
+                        MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
+            }
+        }
+        
+        // Manifests
+        if(jobMsg.manifests != null)
+        {
+            for(String manifest: jobMsg.manifests)
+            {
+                DirectoryMessage dirMsg = DirectoryMessageBuilder.createManifestMessage(jobMsg, manifest);
+                String jsonStr = gson.toJson(dirMsg);
+                
+                getChannel().basicPublish("", Constants.MQ_DIRS, 
+                        MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
+            }
         }
     }
 }

@@ -54,15 +54,37 @@ public class DirectoryProcessor
      * Process Directory Message
      * @param dirMsg directory message 
      * @throws IOException an exception
-     */
+     */    
     public void processMessage(DirectoryMessage dirMsg) throws Exception
+    {
+        if(dirMsg.dir != null)
+        {
+            processDirectoryMessage(dirMsg);
+            return;
+        }
+        
+        if(dirMsg.manifest != null)
+        {
+            processManifestMessage(dirMsg);
+        }
+    }
+    
+    
+    private void processDirectoryMessage(DirectoryMessage dirMsg) throws Exception
     {
         log.info("Processing directory " + dirMsg.dir);
         
         File dir = new File(dirMsg.dir);
-        DirectoryStream<Path> dirStream = Files.newDirectoryStream(dir.toPath());
+        if(!dir.exists())
+        {
+            log.warn("Directory doesn't exist: " + dir.getAbsolutePath());
+            return;
+        }
+        
+        DirectoryStream<Path> dirStream = null;
         try
         {
+            dirStream = Files.newDirectoryStream(dir.toPath());
             FileBatch fileBatch = new FileBatch(batchSize);
             
             Iterator<Path> itr = dirStream.iterator();
@@ -89,6 +111,20 @@ public class DirectoryProcessor
         }
     }
 
+    
+    private void processManifestMessage(DirectoryMessage dirMsg) throws Exception
+    {
+        log.info("Processing manifest " + dirMsg.manifest);
+        
+        File manifest = new File(dirMsg.manifest);
+        if(!manifest.exists())
+        {
+            log.warn("Manifest doesn't exist: " + manifest.getAbsolutePath());
+            return;
+        }
+
+    }
+    
     
     /**
      * Process a file

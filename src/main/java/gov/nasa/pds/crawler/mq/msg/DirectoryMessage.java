@@ -25,6 +25,11 @@ public class DirectoryMessage
     public String dir;
     
     /**
+     * Manifest file (contains list of files to process)
+     */
+    public String manifest;
+    
+    /**
      * Product class filter. List of classes to include.
      */
     public Set<String> prodClassInclude;
