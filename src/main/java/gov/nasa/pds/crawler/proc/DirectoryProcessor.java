@@ -1,6 +1,8 @@
 package gov.nasa.pds.crawler.proc;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -98,7 +100,7 @@ public class DirectoryProcessor
                 }
                 else
                 {
-                    processFile(path, dirMsg, fileBatch);
+                    processFile(path.toFile(), dirMsg, fileBatch);
                 }
             }
             
@@ -123,6 +125,36 @@ public class DirectoryProcessor
             return;
         }
 
+        BufferedReader rd = null;
+        try
+        {
+            FileBatch fileBatch = new FileBatch(batchSize);
+            
+            rd = new BufferedReader(new FileReader(manifest));
+            
+            String line;
+            while((line = rd.readLine()) != null)
+            {
+                line = line.trim();
+                if(line.length() == 0 || line.startsWith("#")) continue;
+                
+                File file = new File(line);
+                if(!file.exists())
+                {
+                    log.warn("File " + line + " doesn't exist");
+                    continue;
+                }
+                
+                processFile(file, dirMsg, fileBatch);
+            }
+            
+            // Publish final batch if it is not empty
+            publishFileBatch(dirMsg, fileBatch);
+        }
+        finally
+        {
+            CloseUtils.close(rd);
+        }
     }
     
     
@@ -133,14 +165,14 @@ public class DirectoryProcessor
      * @param fileBatch file batch info
      * @throws IOException an exception
      */
-    private void processFile(Path path, DirectoryMessage dirMsg, FileBatch fileBatch) throws Exception
+    private void processFile(File path, DirectoryMessage dirMsg, FileBatch fileBatch) throws Exception
     {
-        String fileName = path.getFileName().toString().toLowerCase();
+        String fileName = path.getName().toLowerCase();
         // Only process PDS labels (XML files)
         if(!fileName.endsWith(".xml")) return;
         
         // Get PDS label info - LIDVID and product class
-        String strPath = path.toAbsolutePath().toString();
+        String strPath = path.getAbsolutePath();
         PdsLabelInfo info = getFileInfo(strPath);
         
         // This is not a PDS label
@@ -243,10 +275,9 @@ public class DirectoryProcessor
     }
 
     
-    private void publishCollectionInventory(DirectoryMessage dirMsg, Path path, PdsCollectionInfo info) throws Exception
+    private void publishCollectionInventory(DirectoryMessage dirMsg, File collectionFile, 
+            PdsCollectionInfo info) throws Exception
     {
-        File collectionFile = path.toFile();
-        
         CollectionInventoryMessage newMsg = CollectionInventoryMessageBuilder.create(dirMsg, collectionFile, info);
         publisher.publish(newMsg);
     }
