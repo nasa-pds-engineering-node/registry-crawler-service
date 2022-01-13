@@ -18,7 +18,7 @@ ARG big_data_crawler_server_version=1.0.0-SNAPSHOT
 #### 3. Build the docker image as follows.
 
 ```
-docker image build -t nasapds/big-data-crawler-server .
+docker image build --tag nasapds/big-data-crawler-server .
 ```
 
 ## 🏃 Steps to run a docker container of the Big Data Crawler Server

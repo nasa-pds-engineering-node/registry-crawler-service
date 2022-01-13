@@ -33,17 +33,13 @@ FROM openjdk:11-slim
 # Set the following argument with a compatible Big Data Crawler Server version
 ARG big_data_crawler_server_version=1.0.0-SNAPSHOT
 
-# Install curl
-RUN apt-get update -y
-RUN apt-get install curl -y
-
 ENV BIG_DATA_CRAWLER_SERVER_BIN_PATH=https://github.com/NASA-PDS/big-data-crawler-server/releases/download/v${big_data_crawler_server_version}/big-data-crawler-${big_data_crawler_server_version}-bin.tar.gz
 
 # Install Big Data Crawler Server
 ADD $BIG_DATA_CRAWLER_SERVER_BIN_PATH /tmp/big-data-crawler-server-bin.tar.gz
-RUN  mkdir /opt/big-data-crawler-server  \
-     && tar xzf /tmp/big-data-crawler-server-bin.tar.gz  -C /opt/big-data-crawler-server --strip-components 1 \
-     && rm -f /tmp/big-data-crawler-server-bin.tar.gz
+RUN  mkdir /opt/big-data-crawler-server &&\
+     tar xzf /tmp/big-data-crawler-server-bin.tar.gz  -C /opt/big-data-crawler-server --strip-components 1 &&\
+     rm -f /tmp/big-data-crawler-server-bin.tar.gz
 ENV PATH="$PATH:/opt/big-data-crawler-server/bin"
 
 # Start Big Data Crawler Server
