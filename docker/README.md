@@ -21,6 +21,21 @@ ARG big_data_crawler_server_version=1.0.0-SNAPSHOT
 docker image build --tag nasapds/big-data-crawler-server .
 ```
 
+#### 4. As an optional step, push the docker image to a container image library.
+
+For example, follow the below steps to push the newly built image to the Docker Hub.
+
+* Execute the following command to log into the Docker Hub with a username and password (use the username and password of https://hub.docker.com/u/nasapds).
+```
+docker login
+```
+* Push the docker image to the Docker Hub.
+```
+docker image push nasapds/big-data-crawler-server
+```
+* Visit the Docker Hub (https://hub.docker.com/u/nasapds) and make sure that the `nasapds/big-data-crawler-server` image is available, so that it can be reused by other users without building it.
+
+
 ## 🏃 Steps to run a docker container of the Big Data Crawler Server
 
 #### 1. Update the Big Data Crawler Server configuration file.
