@@ -42,8 +42,9 @@
 # Absolute path for the Big Data Crawler Server configuration file in the host machine (E.g.: /tmp/cfg/crawler-server.cfg)
 CRAWLER_SERVER_CONFIG_FILE=/tmp/cfg/crawler-server.cfg
 
-# Absolute path for the Harvest data directory in the host machine (E.g.: /tmp/data/urn-nasa-pds-insight_rad)
-HARVEST_DATA_DIR=/tmp/data
+# Absolute path for the Harvest data directory in the host machine (E.g.: /tmp/big-data-harvest-data/urn-nasa-pds-insight_rad).
+# This directory will get created automatically, if the big-data-harvest-client is executed with the option to download test data.
+HARVEST_DATA_DIR=/tmp/big-data-harvest-data
 
 
 # Check if the Big Data Crawler Server configuration file exists
@@ -65,6 +66,7 @@ fi
 # Execute docker container run to start the Big Data Crawler Server
 docker container run --name big-data-crawler-server \
            --rm \
+           -p 8001:8001 \
            --volume "$CRAWLER_SERVER_CONFIG_FILE":/cfg/crawler-server.cfg \
            --volume "$HARVEST_DATA_DIR":/data \
            nasapds/big-data-crawler-server
