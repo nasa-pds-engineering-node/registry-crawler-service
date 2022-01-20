@@ -48,16 +48,16 @@ keep it in a local file location such as `/tmp/cfg/crawler-server.cfg`.
 
 | Variable                   | Description |
 | -------------------------- | ----------- |
-| CRAWLER_SERVER_CONFIG_FILE | Absolute path for the Big Data Crawler Server configuration file in the host machine (`E.g.: /tmp/cfg/crawler-server.cfg`) |
-| HARVEST_DATA_DIR           | Absolute path for the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`). If the Big Data Harvest Client is executed with the option to download test data, then this directory will be cleaned-up and populated with test data |
+| CRAWLER_SERVER_CONFIG_FILE | Absolute path of the Big Data Crawler Server configuration file in the host machine (`E.g.: /tmp/cfg/crawler-server.cfg`) |
+| HARVEST_DATA_DIR           | Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`). If the Big Data Harvest Client is executed with the option to download test data, then this directory will be cleaned-up and populated with test data |
 
 ```    
 # Update the following environment variables before executing this script
 
-# Absolute path for the Big Data Crawler Server configuration file in the host machine (E.g.: /tmp/cfg/crawler-server.cfg)
+# Absolute path of the Big Data Crawler Server configuration file in the host machine (E.g.: /tmp/cfg/crawler-server.cfg)
 CRAWLER_SERVER_CONFIG_FILE=/tmp/cfg/crawler-server.cfg
 
-# Absolute path for the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`).
+# Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`).
 # If the Big Data Harvest Client is executed with the option to download test data, then this directory will be
 # cleaned-up and populated with test data. Make sure to have the same `HARVEST_DATA_DIR` value set in the
 # environment variables of the Big Data Harvest Server, Big Data Crawler Server and Big Data Harvest Client.
