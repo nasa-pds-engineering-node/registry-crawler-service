@@ -70,7 +70,7 @@ fi
 # Execute docker container run to start the Big Data Crawler Server
 docker container run --name big-data-crawler-server \
            --rm \
-           -p 8001:8001 \
+           --publish 8001:8001 \
            --volume "$CRAWLER_SERVER_CONFIG_FILE":/cfg/crawler-server.cfg \
            --volume "$HARVEST_DATA_DIR":/data \
            nasapds/big-data-crawler-server
