@@ -48,18 +48,30 @@ keep it in a local file location such as `/tmp/cfg/crawler-server.cfg`.
 
 | Variable                   | Description |
 | -------------------------- | ----------- |
-| CRAWLER_SERVER_CONFIG_FILE | # Absolute path for the Big Data Crawler Server configuration file in the host machine (`E.g.: /tmp/cfg/crawler-server.cfg`) |
-| HARVEST_DATA_DIR           | Absolute path for the Harvest data directory in the host machine (E.g.: `/tmp/data/urn-nasa-pds-insight_rad`) |
+| CRAWLER_SERVER_CONFIG_FILE | Absolute path of the Big Data Crawler Server configuration file in the host machine (`E.g.: /tmp/cfg/crawler-server.cfg`) |
+| HARVEST_DATA_DIR           | Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`). If the Big Data Harvest Client is executed with the option to download test data, then this directory will be cleaned-up and populated with test data |
 
 ```    
 # Update the following environment variables before executing this script
 
-# Absolute path for the Big Data Crawler Server configuration file in the host machine (E.g.: /tmp/cfg/crawler-server.cfg)
+# Absolute path of the Big Data Crawler Server configuration file in the host machine (E.g.: /tmp/cfg/crawler-server.cfg)
 CRAWLER_SERVER_CONFIG_FILE=/tmp/cfg/crawler-server.cfg
 
-# Absolute path for the Harvest data directory in the host machine (E.g.: /tmp/data/urn-nasa-pds-insight_rad)
-HARVEST_DATA_DIR=/tmp/data
+# Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`).
+# If the Big Data Harvest Client is executed with the option to download test data, then this directory will be
+# cleaned-up and populated with test data. Make sure to have the same `HARVEST_DATA_DIR` value set in the
+# environment variables of the Big Data Harvest Server, Big Data Crawler Server and Big Data Harvest Client.
+# Also, this `HARVEST_DATA_DIR` location should be accessible from the docker containers of the Big Data Harvest Server,
+# Big Data Crawler Server and Big Data Harvest Client.
+HARVEST_DATA_DIR=/tmp/big-data-harvest-data
 ```
+
+Note:
+
+Make sure to have the same `HARVEST_DATA_DIR` value set in the environment variables of the Big Data Harvest Server,
+Big Data Crawler Server and Big Data Harvest Client. Also, this `HARVEST_DATA_DIR` location should be accessible from the
+docker containers of the Big Data Harvest Server, Big Data Crawler Server and Big Data Harvest Client.
+
 
 #### 4. Open a terminal and change the current working directory to `big-data-crawler-server/docker`.
 
