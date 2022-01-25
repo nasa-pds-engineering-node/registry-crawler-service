@@ -59,19 +59,19 @@ Go through this file line-by-line and replace the template values with your own.
     </parent>
   
     <properties>
-        <project-name>Big Data Crawler</project-name>
+        <project-name>Registry Crawler Service</project-name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log4j.version>2.17.1</log4j.version>
     </properties>
 
     <groupId>gov.nasa.pds</groupId>
-    <artifactId>big-data-crawler</artifactId>
+    <artifactId>registry-crawler-service</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project-name}</name>
     <description>
-        Put a short paragraph-sized summary of the project here.
+        A web service to crawl a file system for PDS4 labels.
     </description>
     <!-- Check the calendar -->
     <inceptionYear>2021</inceptionYear>
