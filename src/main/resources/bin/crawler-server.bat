@@ -8,7 +8,7 @@ IF NOT DEFINED JAVA_HOME (
 
   java -version > nul 2>&1 
   IF NOT %errorlevel% == 0 (
-    @echo Java 11 or later is required to run Registry Manager.
+    @echo Java 11 or later is required to run Registry Crawler.
     endlocal
     exit /b 0
   )
@@ -41,7 +41,7 @@ popd
 REM Get executable jar. 
 REM NOTE. We can hardcode the version, but have to change the script every release.
 
-FOR /f %%f IN ('dir /b /s "%BD_CRAWLER_HOME%\dist\big-data-crawler-*.jar"') DO (
+FOR /f %%f IN ('dir /b /s "%BD_CRAWLER_HOME%\dist\registry-crawler-service-*.jar"') DO (
   set "TOOL_JAR=%%~f"
 )
 
