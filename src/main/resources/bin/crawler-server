@@ -41,7 +41,7 @@ if [ -n "$JAVA_HOME" ]; then
 else
     $(java -version > /dev/null 2>&1)
     if [[ $? -ne 0 ]] ; then
-        echo "Java 1.8 or later is required to run Registry Manager."
+        echo "Java 11 or later is required to run Registry Crawler."
         exit 1
     fi
     JAVA=java
@@ -52,7 +52,7 @@ SCRIPT_DIR=$(cd "$( dirname $0 )" && pwd)
 BD_CRAWLER_HOME=$(cd ${SCRIPT_DIR}/.. && pwd)
 
 # Executable Jar
-TOOL_JARS=(${BD_CRAWLER_HOME}/dist/big-data-crawler-*.jar)
+TOOL_JARS=(${BD_CRAWLER_HOME}/dist/registry-crawler-service-*.jar)
 TOOL_JAR=${TOOL_JARS[0]}
 
 # Run Crawler
