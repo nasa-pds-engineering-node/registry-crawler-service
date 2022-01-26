@@ -31,7 +31,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 # ----------------------------------------------------------------------------------------------
-# This script is used to start the Big Data Crawler Server docker container with a simple command.
+# This script is used to start the Registry Crawler Service docker container with a simple command.
 #
 # Usage: ./run.sh
 #
@@ -39,23 +39,23 @@
 
 # Update the following environment variables before executing this script
 
-# Absolute path of the Big Data Crawler Server configuration file in the host machine (E.g.: /tmp/cfg/crawler-server.cfg)
-CRAWLER_SERVER_CONFIG_FILE=/tmp/cfg/crawler-server.cfg
+# Absolute path of the Registry Crawler Service configuration file in the host machine (E.g.: /tmp/cfg/crawler-server.cfg)
+CRAWLER_SERVICE_CONFIG_FILE=/tmp/cfg/crawler-server.cfg
 
-# Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/big-data-harvest-data`).
-# If the Big Data Harvest Client is executed with the option to download test data, then this directory will be
+# Absolute path of the Harvest data directory in the host machine (E.g.: `/tmp/registry-harvest-data`).
+# If the Registry Harvest CLI is executed with the option to download test data, then this directory will be
 # cleaned-up and populated with test data. Make sure to have the same `HARVEST_DATA_DIR` value set in the
-# environment variables of the Big Data Harvest Server, Big Data Crawler Server and Big Data Harvest Client.
-# Also, this `HARVEST_DATA_DIR` location should be accessible from the docker containers of the Big Data Harvest Server,
-# Big Data Crawler Server and Big Data Harvest Client.
-HARVEST_DATA_DIR=/tmp/big-data-harvest-data
+# environment variables of the Registry Harvest Service, Registry Crawler Service and Registry Harvest CLI.
+# Also, this `HARVEST_DATA_DIR` location should be accessible from the docker containers of the Registry Harvest Service,
+# Registry Crawler Service and Registry Harvest CLI.
+HARVEST_DATA_DIR=/tmp/registry-harvest-data
 
 
-# Check if the Big Data Crawler Server configuration file exists
-if [ ! -f "$CRAWLER_SERVER_CONFIG_FILE" ]; then
-    echo "Error: The Big Data Crawler Server configuration file $CRAWLER_SERVER_CONFIG_FILE does not exist." \
-            "Set an absolute file path of an existing Big Data Crawler Server configuration file in the $0 file" \
-            "as the environment variable 'CRAWLER_SERVER_CONFIG_FILE'." 1>&2
+# Check if the Registry Crawler Service configuration file exists
+if [ ! -f "$CRAWLER_SERVICE_CONFIG_FILE" ]; then
+    echo "Error: The Registry Crawler Service configuration file $CRAWLER_SERVICE_CONFIG_FILE does not exist." \
+            "Set an absolute file path of an existing Registry Crawler Service configuration file in the $0 file" \
+            "as the environment variable 'CRAWLER_SERVICE_CONFIG_FILE'." 1>&2
     exit 1
 fi
 
@@ -67,10 +67,10 @@ if [ ! -d "$HARVEST_DATA_DIR" ]; then
     exit 1
 fi
 
-# Execute docker container run to start the Big Data Crawler Server
-docker container run --name big-data-crawler-server \
+# Execute docker container run to start the Registry Crawler Service
+docker container run --name registry-crawler-service \
            --rm \
            --publish 8001:8001 \
-           --volume "$CRAWLER_SERVER_CONFIG_FILE":/cfg/crawler-server.cfg \
+           --volume "$CRAWLER_SERVICE_CONFIG_FILE":/cfg/crawler-server.cfg \
            --volume "$HARVEST_DATA_DIR":/data \
-           nasapds/big-data-crawler-server
+           nasapds/registry-crawler-service
