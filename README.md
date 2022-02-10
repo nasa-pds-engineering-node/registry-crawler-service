@@ -4,6 +4,8 @@ Server application providing the functionality for crawling PDS4 products.
 It has to be used with other components, such as RabbitMQ message broker, Harvest Server and Harvest Client 
 to enable performant ingestion of large data sets into PDS Registry.
 
+The description of the full application is available on https://nasa-pds.github.io/registry-harvest-service/ . Facilities to launch the full application (including this components) are provided in the registry repository (see https://github.com/NASA-PDS/registry/tree/main/docker).
+
 * [📀 Installation](#---installation)
 * [💁‍♀️ Usage](#------usage)
 * [👥 Contributing](#---contributing)
