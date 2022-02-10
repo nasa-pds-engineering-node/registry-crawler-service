@@ -13,5 +13,10 @@ mvn package
 ``` 
 
 ## Documentation
-Documentation is available in https://github.com/NASA-PDS/registry-harvest-service project.
+
+* The latest documentation, including architecture overview, installation, and operation of the software
+is available in https://github.com/NASA-PDS/registry-harvest-service project.
+
+* For more information about running all PDS Registry components in Docker see
+https://github.com/NASA-PDS/registry
 
