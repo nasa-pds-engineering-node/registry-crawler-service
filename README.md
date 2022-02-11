@@ -1,30 +1,10 @@
-# 🪐 NASA PDS New Java Project Template
+# Crawler Web Service
 
-This repository aims at being a base for new Java repositories used in PDS. It guides developers to ease the initialization of a project and recommends preferred options to standardize developments and ease maintenance. Simply click the <kbd>Use this template</kbd> button ↑ (or use [this hyperlink](https://github.com/NASA-PDS/pds-template-repo-java/generate)).
+Server application providing the functionality for crawling PDS4 products. 
+It has to be used with other components, such as RabbitMQ message broker, Harvest Server and Harvest Client 
+to enable performant ingestion of large data sets into PDS Registry.
 
-## 🏃 Getting Started With This Template
-
-See our wiki page for more info on setting up your new repo. You can remove this section once you have completed the necessary start-up steps.
-
-https://github.com/NASA-PDS/nasa-pds.github.io/wiki/Git-and-Github-Guide#creating-a-new-repo
-
-**👉 Important!** You must assign the teams as mentioned on the wiki page above! At a minimum, these are:
-
-| Team                                | Permission |
-| ----------------------------------- | ---------- |
-| `@NASA-PDS/pds-software-committers` | `write`    |
-| `@NASA-PDS/pds-software-pmc`        | `admin`    |
-| `@NASA-PDS/pds-operations`          | `admin`    |
-
----
-
-# My Project
-
-This is the XYZ that does this, that, and the other thing for the Planetary Data System.
-
-Please visit our website at: https://nasa-pds.github.io/pds-my-project
-
-It has useful information for developers and end-users.
+The description of the full application is available on https://nasa-pds.github.io/registry-harvest-service/ . Facilities to launch the full application (including this components) are provided in the registry repository (see https://github.com/NASA-PDS/registry/tree/main/docker).
 
 * [📀 Installation](#---installation)
 * [💁‍♀️ Usage](#------usage)
@@ -43,12 +23,29 @@ It has useful information for developers and end-users.
 
 ## 📀 Installation
 
-_Installation instructions here_.
+This is a Java application. You need Java 11 JDK and Maven to build it.
+To create a binary distribution (ZIP and TGZ archives) run the following maven command:
+
+```
+mvn package
+``` 
+
+Binary archives (such as "registry-crawler-service-1.0.0-SNAPSHOT-bin.zip") will be created in "target" directory.
+
+Prebuilt binaries are available in https://github.com/NASA-PDS/registry-crawler-service/releases
+
+To install, just extract a binary archive into some folder, such as "/opt/crawler"
 
 
 ## 💁‍♀️ Usage
 
-_Basic usage instructions here_.
+* Go to <install_directory>/bin and run "crawler-server" without any parameters to see usage information.
+
+* The latest documentation, including architecture overview, installation, and operation of the software
+is available in https://github.com/NASA-PDS/registry-harvest-service project.
+
+* For more information about running all PDS Registry components in Docker see
+https://github.com/NASA-PDS/registry
 
 
 ## 👥 Contributing
