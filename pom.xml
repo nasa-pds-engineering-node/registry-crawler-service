@@ -146,6 +146,12 @@ Go through this file line-by-line and replace the template values with your own.
             <artifactId>jetty-servlet</artifactId>
             <version>9.4.44.v20210927</version>
         </dependency>
+        <!-- Registry Common library -->
+        <dependency>
+            <groupId>gov.nasa.pds</groupId>
+            <artifactId>registry-common</artifactId>
+            <version>1.2.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

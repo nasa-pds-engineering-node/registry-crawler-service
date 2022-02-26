@@ -14,11 +14,11 @@ import com.rabbitmq.client.MessageProperties;
 
 import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.MQPublisher;
-import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
-import gov.nasa.pds.crawler.mq.msg.ProductMessage;
 import gov.nasa.pds.crawler.proc.DirectoryProcessor;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.mq.msg.CollectionInventoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
 
 /**

@@ -3,6 +3,8 @@ package gov.nasa.pds.crawler.mq.msg;
 import java.io.File;
 
 import gov.nasa.pds.crawler.meta.PdsCollectionInfo;
+import gov.nasa.pds.registry.common.mq.msg.CollectionInventoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
 
 /**
  * Builds collection inventory messages

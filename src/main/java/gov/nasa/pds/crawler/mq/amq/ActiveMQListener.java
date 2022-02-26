@@ -9,7 +9,7 @@ import org.apache.activemq.transport.TransportListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
 
 /**

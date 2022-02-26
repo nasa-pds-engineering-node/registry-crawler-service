@@ -13,9 +13,10 @@ import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.MessageProperties;
 
 import gov.nasa.pds.crawler.Constants;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
-import gov.nasa.pds.crawler.mq.msg.JobMessage;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.JobMessage;
+
 
 /**
  * RabbitMQ consumer to process job messages

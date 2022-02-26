@@ -17,15 +17,16 @@ import gov.nasa.pds.crawler.meta.PdsCollectionInfo;
 import gov.nasa.pds.crawler.meta.PdsLabelInfo;
 import gov.nasa.pds.crawler.meta.PdsLabelInfoParser;
 import gov.nasa.pds.crawler.mq.MQPublisher;
-import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
 import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessageBuilder;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
 import gov.nasa.pds.crawler.mq.msg.FileBatch;
-import gov.nasa.pds.crawler.mq.msg.ProductMessage;
 import gov.nasa.pds.crawler.mq.msg.ProductMessageBuilder;
-import gov.nasa.pds.crawler.util.CloseUtils;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.mq.msg.CollectionInventoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
+import gov.nasa.pds.registry.common.util.CloseUtils;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
+
 
 /**
  * Process Directory Messages

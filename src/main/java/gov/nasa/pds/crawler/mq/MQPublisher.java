@@ -1,8 +1,8 @@
 package gov.nasa.pds.crawler.mq;
 
-import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
-import gov.nasa.pds.crawler.mq.msg.ProductMessage;
+import gov.nasa.pds.registry.common.mq.msg.CollectionInventoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
 
 /**
  * Message queue publisher interface 

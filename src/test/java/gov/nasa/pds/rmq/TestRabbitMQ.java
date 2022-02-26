@@ -41,8 +41,8 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
 import gov.nasa.pds.crawler.Constants;
-import gov.nasa.pds.crawler.mq.msg.ProductMessage;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
 
 public class TestRabbitMQ

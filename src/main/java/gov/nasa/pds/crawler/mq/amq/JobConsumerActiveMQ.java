@@ -16,11 +16,11 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 
 import gov.nasa.pds.crawler.Constants;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
-import gov.nasa.pds.crawler.mq.msg.JobMessage;
-import gov.nasa.pds.crawler.util.CloseUtils;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.JobMessage;
+import gov.nasa.pds.registry.common.util.CloseUtils;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
 
 /**
@@ -126,7 +126,7 @@ public class JobConsumerActiveMQ implements Runnable
             if(stopRequested) break;
         }
         
-        CloseUtils.close(session);
+        close(session);
     }
     
     
@@ -179,4 +179,17 @@ public class JobConsumerActiveMQ implements Runnable
             }
         }
     }
+    
+    
+    private void close(Session session)
+    {
+        try
+        {
+            session.close();
+        }
+        catch(Exception ex)
+        {
+        }
+    }
+
 }
