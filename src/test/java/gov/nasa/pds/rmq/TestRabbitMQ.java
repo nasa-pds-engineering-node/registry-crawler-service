@@ -40,7 +40,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
-import gov.nasa.pds.crawler.Constants;
+import gov.nasa.pds.registry.common.mq.msg.MQConstants;
 import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
 import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
@@ -100,7 +100,7 @@ public class TestRabbitMQ
         
         try
         {
-            channel.basicConsume(Constants.MQ_PRODUCTS, false, consumer);
+            channel.basicConsume(MQConstants.MQ_PRODUCTS, false, consumer);
         }
         catch(Exception ex)
         {

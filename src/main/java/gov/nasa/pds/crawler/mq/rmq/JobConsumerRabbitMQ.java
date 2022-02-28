@@ -12,10 +12,10 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.MessageProperties;
 
-import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
 import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
 import gov.nasa.pds.registry.common.mq.msg.JobMessage;
+import gov.nasa.pds.registry.common.mq.msg.MQConstants;
 
 
 /**
@@ -46,7 +46,7 @@ public class JobConsumerRabbitMQ extends DefaultConsumer
      */
     public void start() throws Exception
     {
-        getChannel().basicConsume(Constants.MQ_JOBS, false, this);
+        getChannel().basicConsume(MQConstants.MQ_JOBS, false, this);
     }
     
     
@@ -90,7 +90,7 @@ public class JobConsumerRabbitMQ extends DefaultConsumer
                 DirectoryMessage dirMsg = DirectoryMessageBuilder.createDirectoryMessage(jobMsg, dir);
                 String jsonStr = gson.toJson(dirMsg);
                 
-                getChannel().basicPublish("", Constants.MQ_DIRS, 
+                getChannel().basicPublish("", MQConstants.MQ_DIRS, 
                         MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
             }
         }
@@ -103,7 +103,7 @@ public class JobConsumerRabbitMQ extends DefaultConsumer
                 DirectoryMessage dirMsg = DirectoryMessageBuilder.createManifestMessage(jobMsg, manifest);
                 String jsonStr = gson.toJson(dirMsg);
                 
-                getChannel().basicPublish("", Constants.MQ_DIRS, 
+                getChannel().basicPublish("", MQConstants.MQ_DIRS, 
                         MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
             }
         }
