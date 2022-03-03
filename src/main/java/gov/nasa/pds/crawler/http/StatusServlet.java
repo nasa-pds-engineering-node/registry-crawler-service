@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import gov.nasa.pds.crawler.mq.MQClient;
-import gov.nasa.pds.crawler.util.ManifestUtils;
+import gov.nasa.pds.registry.common.util.ManifestUtils;
 
 
 /**
@@ -107,6 +107,7 @@ public class StatusServlet extends HttpServlet
     }
 
     
+    @SuppressWarnings("restriction")
     private String numOpenFiles()
     {
         OperatingSystemMXBean os = ManagementFactory.getOperatingSystemMXBean();

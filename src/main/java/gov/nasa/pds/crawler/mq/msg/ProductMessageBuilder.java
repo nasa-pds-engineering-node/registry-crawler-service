@@ -1,5 +1,8 @@
 package gov.nasa.pds.crawler.mq.msg;
 
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
+
 /**
  * Helper methods to create File Messages.
  * @author karpenko
@@ -18,7 +21,6 @@ public class ProductMessageBuilder
         
         msg.jobId = dirMsg.jobId;
         msg.nodeName = dirMsg.nodeName;
-        msg.dateFields = dirMsg.dateFields;
         msg.fileRefRules = dirMsg.fileRefs;
         msg.overwrite = dirMsg.overwrite;
 

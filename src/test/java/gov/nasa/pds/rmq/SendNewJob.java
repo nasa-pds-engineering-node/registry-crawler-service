@@ -7,7 +7,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-import gov.nasa.pds.crawler.mq.msg.JobMessage;
+import gov.nasa.pds.registry.common.mq.msg.JobMessage;
+
 
 public class SendNewJob
 {

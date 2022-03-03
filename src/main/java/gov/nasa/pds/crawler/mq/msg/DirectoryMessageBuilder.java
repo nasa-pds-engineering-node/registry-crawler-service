@@ -1,5 +1,8 @@
 package gov.nasa.pds.crawler.mq.msg;
 
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.JobMessage;
+
 /**
  * Helper methods to create Directory Messages.
  * @author karpenko
@@ -43,7 +46,6 @@ public class DirectoryMessageBuilder
         msg.nodeName = jobMsg.nodeName;
         msg.prodClassInclude = jobMsg.prodClassInclude;
         msg.prodClassExclude = jobMsg.prodClassExclude;
-        msg.dateFields = jobMsg.dateFields;
         msg.fileRefs = jobMsg.fileRefs;
         msg.overwrite = jobMsg.overwrite;
         
@@ -65,7 +67,6 @@ public class DirectoryMessageBuilder
         msg.dir = dir;
         msg.prodClassInclude = dirMsg.prodClassInclude;
         msg.prodClassExclude = dirMsg.prodClassExclude;
-        msg.dateFields = dirMsg.dateFields;
         msg.fileRefs = dirMsg.fileRefs;
         msg.overwrite = dirMsg.overwrite;
         

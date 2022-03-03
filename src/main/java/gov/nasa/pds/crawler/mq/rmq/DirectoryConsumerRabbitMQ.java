@@ -12,13 +12,13 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.MessageProperties;
 
-import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.MQPublisher;
-import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
-import gov.nasa.pds.crawler.mq.msg.ProductMessage;
 import gov.nasa.pds.crawler.proc.DirectoryProcessor;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.mq.msg.CollectionInventoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.MQConstants;
+import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
 
 /**
@@ -53,7 +53,7 @@ public class DirectoryConsumerRabbitMQ extends DefaultConsumer implements MQPubl
      */
     public void start() throws Exception
     {
-        getChannel().basicConsume(Constants.MQ_DIRS, false, this);
+        getChannel().basicConsume(MQConstants.MQ_DIRS, false, this);
     }
     
     
@@ -103,7 +103,7 @@ public class DirectoryConsumerRabbitMQ extends DefaultConsumer implements MQPubl
     public void publish(DirectoryMessage msg) throws Exception
     {
         String jsonStr = gson.toJson(msg);
-        getChannel().basicPublish("", Constants.MQ_DIRS, 
+        getChannel().basicPublish("", MQConstants.MQ_DIRS, 
                 MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
     }
 
@@ -112,7 +112,7 @@ public class DirectoryConsumerRabbitMQ extends DefaultConsumer implements MQPubl
     public void publish(ProductMessage msg) throws Exception
     {
         String jsonStr = gson.toJson(msg);
-        getChannel().basicPublish("", Constants.MQ_PRODUCTS, 
+        getChannel().basicPublish("", MQConstants.MQ_PRODUCTS, 
                 MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
     }
 
@@ -121,7 +121,7 @@ public class DirectoryConsumerRabbitMQ extends DefaultConsumer implements MQPubl
     public void publish(CollectionInventoryMessage msg) throws Exception
     {
         String jsonStr = gson.toJson(msg);
-        getChannel().basicPublish("", Constants.MQ_COLLECTIONS, 
+        getChannel().basicPublish("", MQConstants.MQ_COLLECTIONS, 
                 MessageProperties.MINIMAL_PERSISTENT_BASIC, jsonStr.getBytes());
     }
 }

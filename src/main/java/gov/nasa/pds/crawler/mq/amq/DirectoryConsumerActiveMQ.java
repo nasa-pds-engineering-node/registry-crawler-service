@@ -14,14 +14,13 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
-import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.mq.MQPublisher;
-import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
-import gov.nasa.pds.crawler.mq.msg.ProductMessage;
 import gov.nasa.pds.crawler.proc.DirectoryProcessor;
-import gov.nasa.pds.crawler.util.CloseUtils;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.mq.msg.CollectionInventoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.MQConstants;
+import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
 
 /**
@@ -66,9 +65,9 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
         proc = new DirectoryProcessor(this);
         
         session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-        dirQueue = session.createQueue(Constants.MQ_DIRS);
-        prodQueue = session.createQueue(Constants.MQ_PRODUCTS);
-        colQueue = session.createQueue(Constants.MQ_COLLECTIONS);
+        dirQueue = session.createQueue(MQConstants.MQ_DIRS);
+        prodQueue = session.createQueue(MQConstants.MQ_PRODUCTS);
+        colQueue = session.createQueue(MQConstants.MQ_COLLECTIONS);
         
         // Directory messages consumer
         dirConsumer = session.createConsumer(dirQueue);
@@ -151,7 +150,7 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
             if(stopRequested) break;
         }
         
-        CloseUtils.close(session);
+        close(session);
     }
 
 
@@ -205,5 +204,16 @@ public class DirectoryConsumerActiveMQ implements Runnable, MQPublisher
         TextMessage newMsg = session.createTextMessage(jsonStr);
         colProducer.send(newMsg);
     }
+
     
+    private void close(Session session)
+    {
+        try
+        {
+            session.close();
+        }
+        catch(Exception ex)
+        {
+        }
+    }
 }

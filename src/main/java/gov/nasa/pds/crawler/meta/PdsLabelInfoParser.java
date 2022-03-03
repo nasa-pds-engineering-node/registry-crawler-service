@@ -2,14 +2,12 @@ package gov.nasa.pds.crawler.meta;
 
 import java.io.FileReader;
 
-import javax.xml.stream.EventFilter;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import gov.nasa.pds.crawler.util.CloseUtils;
+import gov.nasa.pds.registry.common.util.CloseUtils;
 
 
 /**

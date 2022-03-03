@@ -14,8 +14,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import gov.nasa.pds.crawler.cfg.IPAddress;
 import gov.nasa.pds.crawler.cfg.RabbitMQCfg;
 import gov.nasa.pds.crawler.mq.MQClient;
-import gov.nasa.pds.crawler.util.CloseUtils;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
 /**
  * RabbitMQ client
@@ -156,7 +155,7 @@ public class RabbitMQClient implements MQClient
     
     public void close()
     {
-        CloseUtils.close(connection);    
+        close(connection);
     }
     
     
@@ -192,4 +191,15 @@ public class RabbitMQClient implements MQClient
         }
     }
 
+    
+    private void close(Connection connection)
+    {
+        try
+        {
+            connection.close();
+        }
+        catch(Exception ex)
+        {
+        }
+    }
 }

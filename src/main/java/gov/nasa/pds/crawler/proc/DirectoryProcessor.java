@@ -12,20 +12,20 @@ import java.util.Iterator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import gov.nasa.pds.crawler.Constants;
 import gov.nasa.pds.crawler.meta.PdsCollectionInfo;
 import gov.nasa.pds.crawler.meta.PdsLabelInfo;
 import gov.nasa.pds.crawler.meta.PdsLabelInfoParser;
 import gov.nasa.pds.crawler.mq.MQPublisher;
-import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessage;
 import gov.nasa.pds.crawler.mq.msg.CollectionInventoryMessageBuilder;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
 import gov.nasa.pds.crawler.mq.msg.FileBatch;
-import gov.nasa.pds.crawler.mq.msg.ProductMessage;
 import gov.nasa.pds.crawler.mq.msg.ProductMessageBuilder;
-import gov.nasa.pds.crawler.util.CloseUtils;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.mq.msg.CollectionInventoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.ProductMessage;
+import gov.nasa.pds.registry.common.util.CloseUtils;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
+
 
 /**
  * Process Directory Messages
@@ -33,8 +33,10 @@ import gov.nasa.pds.crawler.util.ExceptionUtils;
  */
 public class DirectoryProcessor
 {
+    private static final int FILES_MESSAGE_MAX_ITEMS = 50;
+    
     private Logger log;
-    private int batchSize = Constants.FILES_MESSAGE_MAX_ITEMS;
+    private int batchSize = FILES_MESSAGE_MAX_ITEMS;
     private PdsLabelInfoParser labelInfoParser;
 
     private MQPublisher publisher;

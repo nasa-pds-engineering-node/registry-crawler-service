@@ -15,12 +15,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
-import gov.nasa.pds.crawler.Constants;
-import gov.nasa.pds.crawler.mq.msg.DirectoryMessage;
 import gov.nasa.pds.crawler.mq.msg.DirectoryMessageBuilder;
-import gov.nasa.pds.crawler.mq.msg.JobMessage;
-import gov.nasa.pds.crawler.util.CloseUtils;
-import gov.nasa.pds.crawler.util.ExceptionUtils;
+import gov.nasa.pds.registry.common.mq.msg.DirectoryMessage;
+import gov.nasa.pds.registry.common.mq.msg.JobMessage;
+import gov.nasa.pds.registry.common.mq.msg.MQConstants;
+import gov.nasa.pds.registry.common.util.ExceptionUtils;
 
 
 /**
@@ -56,8 +55,8 @@ public class JobConsumerActiveMQ implements Runnable
         gson = new Gson();
         
         session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-        jobQueue = session.createQueue(Constants.MQ_JOBS);
-        dirQueue = session.createQueue(Constants.MQ_DIRS);
+        jobQueue = session.createQueue(MQConstants.MQ_JOBS);
+        dirQueue = session.createQueue(MQConstants.MQ_DIRS);
         
         jobConsumer = session.createConsumer(jobQueue);
         dirProducer = session.createProducer(dirQueue);
@@ -126,7 +125,7 @@ public class JobConsumerActiveMQ implements Runnable
             if(stopRequested) break;
         }
         
-        CloseUtils.close(session);
+        close(session);
     }
     
     
@@ -179,4 +178,17 @@ public class JobConsumerActiveMQ implements Runnable
             }
         }
     }
+    
+    
+    private void close(Session session)
+    {
+        try
+        {
+            session.close();
+        }
+        catch(Exception ex)
+        {
+        }
+    }
+
 }
