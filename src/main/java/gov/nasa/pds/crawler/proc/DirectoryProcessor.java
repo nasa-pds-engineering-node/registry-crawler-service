@@ -186,6 +186,12 @@ public class DirectoryProcessor
         // Collection label
         if(info instanceof PdsCollectionInfo)
         {
+            // Allow a Collection Inventory to overwrite the same ID added as a
+            // result of a situation where Harvest Service consumed a FileBatch, which includes the ID
+            // of Collection Inventory, before processing the CollectionInventory.
+            // Refer to https://github.com/NASA-PDS/registry-harvest-service/issues/25
+            dirMsg.overwrite = true;
+
             publishCollectionInventory(dirMsg, path, (PdsCollectionInfo)info);
         }
         
