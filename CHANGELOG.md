@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/registry-crawler-service/tree/v1.1.0-SNAPSHOT) (2022-11-21)
+
+[Full Changelog](https://github.com/NASA-PDS/registry-crawler-service/compare/v1.0.4...v1.1.0-SNAPSHOT)
+
 ## [v1.0.4](https://github.com/NASA-PDS/registry-crawler-service/tree/v1.0.4) (2022-11-09)
 
 [Full Changelog](https://github.com/NASA-PDS/registry-crawler-service/compare/v1.0.3...v1.0.4)
