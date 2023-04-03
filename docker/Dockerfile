@@ -31,7 +31,7 @@
 FROM openjdk:11-slim
 
 # Set the following argument with a compatible Registry Crawler Service version
-ARG registry_crawler_service_version=1.0.5
+ARG registry_crawler_service_version=1.1.0-SNAPSHOT
 
 ENV REGISTRY_CRAWLER_SERVICE_BIN_PATH=https://github.com/NASA-PDS/registry-crawler-service/releases/download/v${registry_crawler_service_version}/registry-crawler-service-${registry_crawler_service_version}-bin.tar.gz
 
