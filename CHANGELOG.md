@@ -1,8 +1,8 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-crawler-service/tree/«unknown») (2023-04-03)
+## [release/1.0.6](https://github.com/NASA-PDS/registry-crawler-service/tree/release/1.0.6) (2023-04-03)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-crawler-service/compare/v1.0.5...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-crawler-service/compare/v1.0.5...release/1.0.6)
 
 **Defects:**
 
