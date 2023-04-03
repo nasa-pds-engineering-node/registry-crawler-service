@@ -7,6 +7,7 @@
 **Defects:**
 
 - unstable build failed [\#26](https://github.com/NASA-PDS/registry-crawler-service/issues/26) [[s.medium](https://github.com/NASA-PDS/registry-crawler-service/labels/s.medium)]
+- Stable Roundup can no longer trigger Imaging workflow [\#24](https://github.com/NASA-PDS/registry-crawler-service/issues/24)
 
 ## [v1.0.5](https://github.com/NASA-PDS/registry-crawler-service/tree/v1.0.5) (2022-12-13)
 
