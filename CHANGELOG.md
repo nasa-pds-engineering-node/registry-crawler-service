@@ -1,16 +1,12 @@
 # Changelog
 
-## [«unknown»](https://github.com/NASA-PDS/registry-crawler-service/tree/«unknown») (2022-12-22)
+## [«unknown»](https://github.com/NASA-PDS/registry-crawler-service/tree/«unknown») (2023-04-03)
 
-[Full Changelog](https://github.com/NASA-PDS/registry-crawler-service/compare/v1.1.0-SNAPSHOT...«unknown»)
+[Full Changelog](https://github.com/NASA-PDS/registry-crawler-service/compare/v1.0.5...«unknown»)
 
 **Defects:**
 
 - unstable build failed [\#26](https://github.com/NASA-PDS/registry-crawler-service/issues/26) [[s.medium](https://github.com/NASA-PDS/registry-crawler-service/labels/s.medium)]
-
-## [v1.1.0-SNAPSHOT](https://github.com/NASA-PDS/registry-crawler-service/tree/v1.1.0-SNAPSHOT) (2022-12-22)
-
-[Full Changelog](https://github.com/NASA-PDS/registry-crawler-service/compare/v1.0.5...v1.1.0-SNAPSHOT)
 
 ## [v1.0.5](https://github.com/NASA-PDS/registry-crawler-service/tree/v1.0.5) (2022-12-13)
 
