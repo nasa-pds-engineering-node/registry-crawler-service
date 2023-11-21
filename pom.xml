@@ -133,7 +133,7 @@ Go through this file line-by-line and replace the template values with your own.
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-client</artifactId>
-            <version>5.16.7</version>
+            <version>6.0.0</version>
         </dependency>
         <!-- Web server -->
         <dependency>
