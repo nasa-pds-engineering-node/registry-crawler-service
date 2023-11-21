@@ -28,7 +28,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-FROM openjdk:11-slim
+FROM openjdk:18-slim
 
 # Set the following argument with a compatible Registry Crawler Service version
 ARG registry_crawler_service_version=1.1.0
